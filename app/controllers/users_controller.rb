@@ -50,7 +50,7 @@ class UsersController < ApplicationController
     end
 
     def current_user
-      @user = User.find(session[:user_id])
+      @user ||= User.find(session[:user_id])
     end
 
     def user_params
