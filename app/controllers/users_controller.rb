@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  VALID_DOMAIN = 'mwed.co.jp'
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -16,18 +15,12 @@ class UsersController < ApplicationController
   end
 
   def create
-    if User.find_by(email: user_params[:email])
-      redirect_to new_user_url, notice: 'アカウントは既に作成されています。'
-    elsif domain_check
-      @user = User.new(user_params)
-      if @user.save
-        session[:user_id] = @user.id
-        redirect_to @user, notice: 'ユーザー作成に成功しました。'
-      else
-        redirect_to new_user_url, notice: 'ユーザー作成に失敗しました。'
-      end
+    @user = User.new(user_params)
+    if @user.save
+      session[:user_id] = @user.id
+      redirect_to @user, notice: 'ユーザー作成に成功しました。'
     else
-      redirect_to new_user_url, notice: 'このアカウントは無効なアカウントです。'
+      redirect_to new_user_url, notice: 'ユーザー作成に失敗しました。'
     end
   end
 
@@ -62,9 +55,5 @@ class UsersController < ApplicationController
 
     def user_params
       { name: request.env['omniauth.auth']['info']['name'], email: request.env['omniauth.auth']['info']['email'] }
-    end
-
-    def domain_check
-      request.env['omniauth.auth']['extra']['raw_info']['hd'] == VALID_DOMAIN
     end
 end
