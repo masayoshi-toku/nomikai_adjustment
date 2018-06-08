@@ -4,10 +4,8 @@ RSpec.describe UsersController, type: :controller do
   include GoogleOmniauthHelper
 
   describe "GET #new" do
-    it "ページが表紙される" do
-      get :new
-      expect(response).to be_success
-    end
+    before { get :new }
+    it { expect(response).to be_success }
   end
 
   describe "POST #create" do
