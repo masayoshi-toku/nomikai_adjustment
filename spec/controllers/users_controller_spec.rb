@@ -21,7 +21,8 @@ RSpec.describe UsersController, type: :controller do
 
       it "ユーザーの詳細ページへリダイレクトされる" do
         post :create
-        expect(response).to redirect_to(assigns(:user))
+        created_user = User.find_by(email: 'example@mwed.co.jp')
+        expect(response).to redirect_to created_user
       end
     end
 
