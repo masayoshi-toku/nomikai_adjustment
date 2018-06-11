@@ -27,28 +27,36 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context "不正なパラメーターの場合" do
-      it "名前が空であればユーザー作成ページが描画される" do
-        invalid_attributes = { name: '', email: 'example@mwed.co.jp', domain: 'mwed.co.jp' }
-        request.env['omniauth.auth'] = google_mock(invalid_attributes)
+      subject { response }
 
-        post :create
-        expect(response).to redirect_to(new_user_url)
+      context "名前が空である" do
+        before do
+          invalid_attributes = { name: '', email: 'example@mwed.co.jp', domain: 'mwed.co.jp' }
+          request.env['omniauth.auth'] = google_mock(invalid_attributes)
+          post :create
+        end
+
+        it { is_expected.to redirect_to new_user_url }
       end
 
-      it "メールアドレスが空であればユーザー作成ページが描画される" do
-        invalid_attributes = { name: 'Mr.example', email: '', domain: 'mwed.co.jp' }
-        request.env['omniauth.auth'] = google_mock(invalid_attributes)
+      context "メールアドレスが空である" do
+        before do
+          invalid_attributes = { name: 'Mr.example', email: '', domain: 'mwed.co.jp' }
+          request.env['omniauth.auth'] = google_mock(invalid_attributes)
+          post :create
+        end
 
-        post :create
-        expect(response).to redirect_to(new_user_url)
+        it { is_expected.to redirect_to new_user_url }
       end
 
-      it "ドメインが不正の場合はユーザー作成ページにリダイレクトされる" do
-        invalid_attributes = { name: 'Mr.example', email: 'example@gmail.com', domain: 'gmail.com' }
-        request.env['omniauth.auth'] = google_mock(invalid_attributes)
+      context "ドメインが不正である" do
+        before do
+          invalid_attributes = { name: 'Mr.example', email: 'example@gmail.com', domain: 'gmail.com' }
+          request.env['omniauth.auth'] = google_mock(invalid_attributes)
+          post :create
+        end
 
-        post :create
-        expect(response).to redirect_to(new_user_url)
+        it { is_expected.to redirect_to new_user_url }
       end
     end
   end
