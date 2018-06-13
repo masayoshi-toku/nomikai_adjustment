@@ -28,9 +28,7 @@ RSpec.describe SessionsController, type: :controller do
     end
 
     context "サインアップ" do
-      before do
-        create(:user)
-      end
+      before { create(:user) }
 
       context "正しいパラメーターの場合" do
         before do
