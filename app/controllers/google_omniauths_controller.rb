@@ -1,6 +1,6 @@
 class GoogleOmniauthsController < ApplicationController
   def new
-    @user = User.find_or_new_from(user_params)
+    @user = User.find_or_initialize_by(user_params)
 
     if request_from == 'login' && @user.persisted?
       login_and_redirect(@user, 'ログインしました。')

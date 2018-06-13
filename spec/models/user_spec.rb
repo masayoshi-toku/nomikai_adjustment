@@ -36,14 +36,14 @@ RSpec.describe User, type: :model do
 
     context "ユーザーが登録されている場合" do
       it "ユーザーを検索する" do
-        user = User.find_or_new_from(email: attributes_for(:user)[:email])
+        user = User.find_or_initialize_by(email: attributes_for(:user)[:email])
         expect(@user).to eq user
       end
     end
 
     context "ユーザーが登録されていない場合" do
       it "オブジェクトを生成する" do
-        user = User.find_or_new_from(email: 'other_example@mwed.co.jp')
+        user = User.find_or_initialize_by(email: 'other_example@mwed.co.jp')
         expect(user).to be_new_record
       end
     end
