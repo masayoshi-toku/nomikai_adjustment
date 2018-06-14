@@ -14,7 +14,7 @@ RSpec.describe Event, type: :model do
       end
 
       context "タイトルが100文字以上の時" do
-        let(:empty_name_event) { build(:event, title: 'Example title' * 8) }
+        let(:empty_name_event) { build(:event, title: 'これは１５文字のタイトルです。' * 7) }
         it { expect(empty_name_event).to be_invalid }
       end
 
