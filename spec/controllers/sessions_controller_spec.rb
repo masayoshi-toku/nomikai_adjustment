@@ -3,27 +3,32 @@ require 'rails_helper'
 RSpec.describe SessionsController, type: :controller do
   include GoogleOmniauthHelper
   include SessionHelper
+  let(:valid_attributes) { attributes_for(:user).merge(domain: 'mwed.co.jp') }
 
   describe "GET #new" do
-    it "リクエストが成功する" do
-      get :new
-      expect(response).to have_http_status(:success)
-    end
+    subject { get :new }
+
+    it { is_expected.to have_http_status(:success) }
   end
 
   describe "GET #create" do
+    subject { proc { get :create, params: { provider: 'google_auth2' } } }
+
     context "ログイン" do
       before do
         create(:user)
-        @valid_attributes = attributes_for(:user).merge(domain: 'mwed.co.jp')
-        request.env['omniauth.auth'] = google_mock(@valid_attributes)
-        get :create, params: { provider: 'google_auth2' }
+        request.env['omniauth.auth'] = google_mock(valid_attributes)
       end
 
-      it "ログインしてユーザーの詳細ページへリダイレクトする" do
-        user = User.find_by(email: @valid_attributes[:email])
+      it "ログインに成功する" do
+        subject.call
         expect(is_logged_in?).to be true
-        should redirect_to user
+      end
+
+      it "ユーザー詳細ページへリダイレクトする" do
+        subject.call
+        user = User.find_by(email: valid_attributes[:email])
+        expect(response).to redirect_to user
       end
     end
 
@@ -31,33 +36,32 @@ RSpec.describe SessionsController, type: :controller do
       before { create(:user) }
 
       context "正しいパラメーターの場合" do
-        before do
-          @valid_attributes = { name: 'Mr.example2', email: 'other_example@mwed.co.jp', domain: 'mwed.co.jp' }
-          request.env['omniauth.auth'] = google_mock(@valid_attributes)
-        end
+        let(:other_valid_attributes) { { name: 'Mr.example2', email: 'other_example@mwed.co.jp', domain: 'mwed.co.jp' } }
+        before { request.env['omniauth.auth'] = google_mock(other_valid_attributes) }
 
-        it "ユーザーが作成される" do
-          expect{ get :create, params: { provider: 'google_auth2' } }.to change { User.count }.by(1)
-        end
+        it { is_expected.to change { User.count }.by(1) }
 
-        it "ログインしてユーザーの詳細ページへリダイレクトする" do
-          get :create, params: { provider: 'google_auth2' }
-          user = User.find_by(email: @valid_attributes[:email])
+        it "ログインする" do
+          subject.call
           expect(is_logged_in?).to be true
-          assert_redirected_to user
+        end
+
+        it "ユーザー詳細ページへリダイレクトする" do
+          subject.call
+          user = User.find_by(email: other_valid_attributes[:email])
+          expect(response).to redirect_to user
         end
       end
 
       context "不正なパラメーターの場合" do
-        subject { get :create, params: { provider: 'google_auth2' } }
-
         context "ドメインが不正の場合" do
-          before do
-            invalid_attributes = { name: 'Mr.wrong_example', email: 'example@gmail.com', domain: 'gmail.com' }
-            request.env['omniauth.auth'] = google_mock(invalid_attributes)
-          end
+          let(:invalid_attributes) { { name: 'Mr.wrong_example', email: 'example@gmail.com', domain: 'gmail.com' } }
+          before { request.env['omniauth.auth'] = google_mock(invalid_attributes) }
 
-          it { should redirect_to root_url }
+          it "トップページへリダイレクトする" do
+            subject.call
+            expect(response).to redirect_to root_url
+          end
         end
       end
     end
@@ -65,9 +69,7 @@ RSpec.describe SessionsController, type: :controller do
 
   describe "DELETE #destroy" do
     before do
-      @user = create(:user)
-      @valid_attributes = attributes_for(:user).merge(domain: 'mwed.co.jp')
-      request.env['omniauth.auth'] = google_mock(@valid_attributes)
+      request.env['omniauth.auth'] = google_mock(valid_attributes)
       get :create, params: { provider: 'google_auth2' }
     end
 

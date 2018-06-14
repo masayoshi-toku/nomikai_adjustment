@@ -1,33 +1,36 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
+  let(:user) { create(:user) }
+
   describe "GET #index" do
-    it "リクエストが成功する" do
-      get :index
-      expect(response).to have_http_status(:success)
-    end
+    subject { get :index }
+
+    it { is_expected.to have_http_status(:success) }
   end
 
   describe "GET #show" do
-    it "リクエストが成功する" do
-      user = create(:user)
-      get :show, params: { id: user.id }
-      expect(response).to have_http_status(:success)
+    subject { get :show, params: params }
+
+    context "ユーザーが存在する場合" do
+      let(:params) { { id: user.id } }
+
+      it { is_expected.to have_http_status(:success) }
+    end
+
+    context "ユーザーが存在しない場合" do
+      let(:params) { { id: user.id + 1 } }
+
+      it { is_expected.to redirect_to users_url }
     end
   end
 
   describe "DELETE #destroy" do
-    before(:each) do
-      @user = create(:user)
-    end
+    subject { proc { delete :destroy, params: { id: user.id } } }
+    before { user }
 
-    it "ユーザー一覧ページへリダイレクトする" do
-      delete :destroy, params: { id: @user.id }
-      should redirect_to users_url
-    end
+    it { expect(subject.call).to redirect_to users_url }
 
-    it "ユーザーが削除される" do
-      expect{ delete :destroy, params: { id: @user.id } }.to change { User.count }.by(-1)
-    end
+    it { is_expected.to change { User.count }.by(-1) }
   end
 end
