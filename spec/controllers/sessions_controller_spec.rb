@@ -7,7 +7,6 @@ RSpec.describe SessionsController, type: :controller do
 
   describe "GET #new" do
     subject { get :new }
-
     it { is_expected.to have_http_status(:success) }
   end
 
@@ -27,14 +26,11 @@ RSpec.describe SessionsController, type: :controller do
 
       it "ユーザー詳細ページへリダイレクトする" do
         subject.call
-        user = User.find_by(email: valid_attributes[:email])
-        expect(response).to redirect_to user
+        expect(response).to redirect_to User.last
       end
     end
 
     context "サインアップ" do
-      before { create(:user) }
-
       context "正しいパラメーターの場合" do
         let(:other_valid_attributes) { { name: 'Mr.example2', email: 'other_example@mwed.co.jp', domain: 'mwed.co.jp' } }
         before { request.env['omniauth.auth'] = google_mock(other_valid_attributes) }
@@ -48,8 +44,7 @@ RSpec.describe SessionsController, type: :controller do
 
         it "ユーザー詳細ページへリダイレクトする" do
           subject.call
-          user = User.find_by(email: other_valid_attributes[:email])
-          expect(response).to redirect_to user
+          expect(response).to redirect_to User.last
         end
       end
 
