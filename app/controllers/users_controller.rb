@@ -6,6 +6,9 @@ class UsersController < ApplicationController
   end
 
   def show
+    unless @user
+      redirect_to users_url
+    end
   end
 
   def destroy
@@ -15,7 +18,7 @@ class UsersController < ApplicationController
 
   private
     def set_user
-      @user = User.find(params[:id])
+      @user = User.find_by(id: params[:id])
     end
 
     def current_user
