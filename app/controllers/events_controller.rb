@@ -6,6 +6,7 @@ class EventsController < ApplicationController
   end
 
   def show
+    exist_or_redirect(@event)
   end
 
   def new
@@ -13,6 +14,7 @@ class EventsController < ApplicationController
   end
 
   def edit
+    exist_or_redirect(@event)
   end
 
   def create
@@ -26,7 +28,7 @@ class EventsController < ApplicationController
   end
 
   def update
-    if @event.update(event_params)
+    if @event&.update(event_params)
       redirect_to @event, notice: 'Event was successfully updated.'
     else
       render :edit
@@ -34,10 +36,10 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    if @event.destroy
+    if @event&.destroy
       redirect_to events_url, notice: 'Event was successfully destroyed.'
     else
-      edit :index
+      render :index
     end
   end
 
@@ -48,5 +50,11 @@ class EventsController < ApplicationController
 
     def event_params
       params.require(:event).permit(:user_id, :title, :url_path)
+    end
+
+    def exist_or_redirect(event)
+      unless event
+        redirect_to events_url
+      end
     end
 end
