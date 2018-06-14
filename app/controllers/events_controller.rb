@@ -30,8 +30,11 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    @event.destroy
-    redirect_to events_url, notice: 'Event was successfully destroyed.'
+    if @event.destroy
+      redirect_to events_url, notice: 'Event was successfully destroyed.'
+    else
+      edit :index
+    end
   end
 
   private
