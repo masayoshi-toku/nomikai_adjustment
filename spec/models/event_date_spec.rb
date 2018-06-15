@@ -18,11 +18,6 @@ RSpec.describe EventDate, type: :model do
         let(:dup_event_date) { event_date.dup }
         it { expect(dup_event_date).to be_invalid }
       end
-
-      context "日付が不正なフォーマットの時" do
-        let(:wrong_format_event_date) { build(:event_date, event_date: '2018-08') }
-        it { expect(wrong_format_event_date).to be_invalid }
-      end
     end
   end
 end
