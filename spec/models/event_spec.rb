@@ -31,8 +31,9 @@ RSpec.describe Event, type: :model do
 
       context "イベントURLが重複した時" do
         before { create(:event) }
-        other_user = User.create(name: 'Mr.other_example', email: 'other_example@mwed.co.jp')
+        let(:other_user) { create(:user, name: 'Mr.other_example', email: 'other_example@mwed.co.jp') }
         let(:same_url_event) { build(:event, user_id: other_user.id, title: '第1回飲み会（仮）') }
+
         it { expect(same_url_event).to be_invalid }
       end
     end
