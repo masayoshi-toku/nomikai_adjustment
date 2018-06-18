@@ -33,12 +33,12 @@ RSpec.describe SessionsController, type: :controller do
         let(:other_valid_attributes) { { name: 'Mr.example2', email: 'other_example@mwed.co.jp', domain: 'mwed.co.jp' } }
         before { request.env['omniauth.auth'] = google_mock(other_valid_attributes) }
 
-        it { expect{ subject }.to change { User.count }.by(1) } 
+        it { expect{ subject }.to change { User.count }.by(1) }
 
         it "ログインに成功する" do
           subject
           expect(is_logged_in?).to be true
-        end  
+        end
 
         it "ユーザー詳細ページへリダイレクトする" do
           subject
