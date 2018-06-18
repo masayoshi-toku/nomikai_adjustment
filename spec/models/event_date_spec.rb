@@ -8,6 +8,11 @@ RSpec.describe EventDate, type: :model do
     end
 
     context "不正な値の時" do
+      context "イベントと紐づいていない時" do
+        let(:unrelated_event_date) { build(:event_date, event: nil) }
+        it { expect(unrelated_event_date).to be_invalid }
+      end
+
       context "日付が空の時" do
         let(:empty_event_date) { build(:event_date, event_date: '') }
         it { expect(empty_event_date).to be_invalid }
