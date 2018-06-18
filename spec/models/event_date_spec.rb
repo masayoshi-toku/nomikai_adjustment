@@ -2,26 +2,28 @@ require 'rails_helper'
 
 RSpec.describe EventDate, type: :model do
   describe "バリデーション" do
+    subject { build :event_date, attributes }
+
     context "正しい値の時" do
-      let(:event_date) { build(:event_date) }
-      it { expect(event_date).to be_valid }
+      let(:attributes) { attributes_for(:event_date) }
+      it { is_expected.to be_valid }
     end
 
     context "不正な値の時" do
       context "イベントと紐づいていない時" do
-        let(:unrelated_event_date) { build(:event_date, event: nil) }
-        it { expect(unrelated_event_date).to be_invalid }
+        let(:attributes) { { event: nil } }
+        it { is_expected.to be_invalid }
       end
 
       context "日付が空の時" do
-        let(:empty_event_date) { build(:event_date, event_date: '') }
-        it { expect(empty_event_date).to be_invalid }
+        let(:attributes) { { event_date: '' } }
+        it { is_expected.to be_invalid }
       end
 
       context "同じイベントに同じ日付が作成された時" do
-        let(:event_date) { create(:event_date) }
-        let(:dup_event_date) { event_date.dup }
-        it { expect(dup_event_date).to be_invalid }
+        before { create(:event_date) }
+        let(:attributes) { attributes_for(:event_date) }
+        it { expect{ subject }.to raise_error(ActiveRecord::RecordInvalid) }
       end
     end
   end
