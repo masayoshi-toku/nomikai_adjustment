@@ -6,12 +6,13 @@
       %th Title
       %th{:colspan => "3"}
   %tbody
-    - @events.each do |event|
-      %tr
-        %td= event.user_id
-        %td= event.title
-        %td= link_to 'Show', event
-        %td= link_to 'Edit', edit_event_path(event)
-        %td= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' }
+    - if @events
+      - @events.each do |event|
+        %tr
+          %td= event.user_id
+          %td= event.title
+          %td= link_to 'Show', event_path(event.url_path)
+          %td= link_to 'Edit', edit_event_path(event.url_path)
+          %td= link_to 'Destroy', event_path(event.url_path), method: :delete, data: { confirm: 'Are you sure?' }
 %br/
 = link_to 'New Event', new_event_path
