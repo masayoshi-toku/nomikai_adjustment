@@ -15,6 +15,11 @@ RSpec.describe EventDate, type: :model do
         it { is_expected.to be_invalid }
       end
 
+      context "event_idが空の時" do
+        let(:attributes) { { event_id: '' } }
+        it { is_expected.to be_invalid }
+      end
+
       context "日付が空の時" do
         let(:attributes) { { event_date: '' } }
         it { is_expected.to be_invalid }
