@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe EventsController, type: :controller do
+  include SessionTestHelper
   let(:user) { create(:user) }
   let(:event) { create(:event) }
   let(:valid_attributes) { { user_id: user.id, title: '飲み会テストタイトル', url_path: 'this.is%validattirbutes' } }

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe SessionsController, type: :controller do
-  include GoogleOmniauthHelper
-  include SessionHelper
+  include GoogleOmniauthTestHelper
+  include SessionTestHelper
   let(:valid_attributes) { attributes_for(:user).merge(domain: 'mwed.co.jp') }
 
   describe "GET #new" do
