@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe EventForm, type: :model do
   describe "#create" do
-    let(:form) { EventForm.new(user, attributes) }
+    let(:form) { EventForm.new(Event.new, user, attributes) }
     let(:user) { create(:user) }
 
     context "正しい値の場合" do

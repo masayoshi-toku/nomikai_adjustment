@@ -7,7 +7,8 @@ class EventForm
   validates :title, presence: true, length: { maximum: 100 }
   validates :event_dates_text, presence: true
 
-  def initialize(current_user = nil, attributes = {})
+  def initialize(event, current_user = nil, attributes = {})
+    @event = event
     @current_user = current_user
     super(attributes)
   end
