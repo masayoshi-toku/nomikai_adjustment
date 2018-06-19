@@ -21,7 +21,7 @@ class EventsController < ApplicationController
     @event_form = EventForm.new(event_params.merge({ user: current_user }))
 
     if @event_form.event = @event_form.create
-      redirect_to @event_form.event, notice: 'Event was successfully created.'
+      redirect_to @event_form.event.url_path, notice: 'Event was successfully created.'
     else
       render :new
     end
@@ -45,7 +45,7 @@ class EventsController < ApplicationController
 
   private
     def set_event
-      @event = Event.find_by(id: params[:id])
+      @event = Event.find_by(url_path: params[:url_path])
     end
 
     def event_params
