@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+  before_action :logged_in?, except: [:index]
   before_action :set_event, except: [:index, :new, :create]
 
   def index
