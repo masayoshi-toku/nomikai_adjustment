@@ -102,7 +102,7 @@ RSpec.describe EventsController, type: :controller do
         it "イベントの詳細ページへリダイレクトする" do
           subject.call
           event = Event.find_by(title: valid_attributes[:title])
-          expect(response).to redirect_to event.url_path
+          expect(response).to redirect_to event_path(event.url_path)
         end
       end
 
