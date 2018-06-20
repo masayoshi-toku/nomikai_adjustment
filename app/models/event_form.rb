@@ -1,20 +1,13 @@
 class EventForm
   include ActiveModel::Model
 
-  attr_reader :current_user
-  attr_accessor :event, :title, :event_dates_text
+  attr_accessor :current_user, :event, :title, :event_dates_text
 
   validates :title, presence: true, length: { maximum: 100 }
-  validates :event_dates_text, presence: true
-
-  def initialize(event, current_user = nil, attributes = {})
-    @event = event
-    @current_user = current_user
-    super(attributes)
-  end
+  validates :event_dates_text, :current_user, presence: true
 
   def create
-    if invalid? || @current_user.nil?
+    if invalid?
       return false
     end
     self.event = @current_user.events.create(nested_params)

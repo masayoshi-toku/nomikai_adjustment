@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe EventForm, type: :model do
   describe "#create" do
-    let(:form) { EventForm.new(Event.new, user, attributes) }
+    let(:form) { EventForm.new(attributes.merge({ current_user: user, event: Event.new })) }
     let(:user) { create(:user) }
 
     context "正しい値の場合" do
@@ -16,6 +16,13 @@ RSpec.describe EventForm, type: :model do
     context "不正な値の場合" do
       context "タイトルが空の場合" do
         let(:attributes) { { title: "", event_dates_text: "2018/06/18\r\n2018/06/19\r\n2018/06/20" } }
+
+        it { expect(form.create).to be_falsey }
+      end
+
+      context "ユーザーが不明の場合" do
+        before { form.current_user = nil }
+        let(:attributes) { { title: "第一回飲み会", event_dates_text: "2018/06/18\r\n2018/06/19\r\n2018/06/20" } }
 
         it { expect(form.create).to be_falsey }
       end
