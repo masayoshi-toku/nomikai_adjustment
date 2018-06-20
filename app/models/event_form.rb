@@ -21,6 +21,6 @@ class EventForm
     end
 
     def event_dates
-      event_dates_text.split("\r\n").inject(Array.new) {|array, value| array.push({ event_date: value })}
+      event_dates_text.split(/[\r\n]+|\r+|\n+/).inject(Array.new) {|array, value| array.push({ event_date: value })}
     end
 end
