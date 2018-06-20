@@ -6,7 +6,7 @@ RSpec.describe EventsController, type: :controller do
   let(:event) { create(:event) }
   let(:valid_attributes) {
     { title: '飲み会テストタイトル',
-    event_dates_text: "6/18\r06/19\n06/20\r\n6/21\r\n\r\n6/22\n\n\n6/23\r\r\r\r6/24" }
+      event_dates_text: "6/18\r06/19\n06/20\r\n6/21\r\n\r\n6/22\n\n\n6/23\r\r\r\r6/24" }
    }
 
   describe "GET #index" do
@@ -101,7 +101,6 @@ RSpec.describe EventsController, type: :controller do
         subject { proc { post :create, params: { event_form: valid_attributes } } }
 
         it { is_expected.to change{ Event.count }.by(1) }
-
         it { is_expected.to change{ EventDate.count }.by(7) }
 
         it "イベントの詳細ページへリダイレクトする" do
@@ -192,7 +191,6 @@ RSpec.describe EventsController, type: :controller do
         let(:params) { { url_path: event.url_path } }
 
         it { expect{ subject }.to change{ Event.count }.by(-1) }
-
         it { is_expected.to redirect_to events_url }
       end
 
