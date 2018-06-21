@@ -21,10 +21,6 @@ class EventForm
     end
 
     def event_dates
-      dates = []
-      event_dates_text.split("\r\n").each do |event_date|
-        dates << { event_date: event_date }
-      end
-      return dates
+      event_dates_text.split("\r\n").inject(Array.new) {|array, value| array.push({ event_date: value })}
     end
 end
