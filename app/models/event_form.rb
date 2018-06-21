@@ -8,7 +8,7 @@ class EventForm
 
   def create
     return false if invalid?
-    self.event = @current_user.events.create(nested_params)
+    user.events.create(nested_params)
   end
 
   private

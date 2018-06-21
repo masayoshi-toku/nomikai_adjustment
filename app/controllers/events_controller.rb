@@ -20,7 +20,7 @@ class EventsController < ApplicationController
   def create
     @event_form = EventForm.new(event_params.merge({ user: current_user }))
 
-    if @event_form.create
+    if @event_form.event = @event_form.create
       redirect_to @event_form.event, notice: 'Event was successfully created.'
     else
       render :new
