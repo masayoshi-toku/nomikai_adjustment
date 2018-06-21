@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(version: 2018_06_20_044428) do
   end
 
   create_table "reactions", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "event_date_id"
+    t.integer "user_id", null: false
+    t.integer "event_date_id", null: false
     t.integer "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
