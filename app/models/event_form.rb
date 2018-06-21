@@ -7,9 +7,7 @@ class EventForm
   validates :event_dates_text, :current_user, presence: true
 
   def create
-    if invalid?
-      return false
-    end
+    return false if invalid?
     self.event = @current_user.events.create(nested_params)
   end
 
