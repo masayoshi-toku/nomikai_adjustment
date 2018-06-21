@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_18_084043) do
+ActiveRecord::Schema.define(version: 2018_06_20_044428) do
 
   create_table "event_dates", force: :cascade do |t|
     t.integer "event_id", null: false
@@ -29,6 +29,16 @@ ActiveRecord::Schema.define(version: 2018_06_18_084043) do
     t.string "url_path", null: false
     t.index ["user_id", "title"], name: "index_events_on_user_id_and_title", unique: true
     t.index ["user_id"], name: "index_events_on_user_id"
+  end
+
+  create_table "reactions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "event_date_id"
+    t.integer "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_date_id"], name: "index_reactions_on_event_date_id"
+    t.index ["user_id"], name: "index_reactions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
