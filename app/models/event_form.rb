@@ -1,10 +1,10 @@
 class EventForm
   include ActiveModel::Model
 
-  attr_accessor :current_user, :event, :title, :event_dates_text
+  attr_accessor :user, :event, :title, :event_dates_text
 
   validates :title, presence: true, length: { maximum: 100 }
-  validates :event_dates_text, :current_user, presence: true
+  validates :event_dates_text, :user, presence: true
 
   def create
     return false if invalid?
