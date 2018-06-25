@@ -21,7 +21,7 @@ RSpec.describe EventsController, type: :controller do
     context "ログイン済みの場合" do
       before do
         event
-        log_in(event.user)
+        log_in(user)
       end
 
       context "イベントが存在する場合" do
@@ -31,7 +31,7 @@ RSpec.describe EventsController, type: :controller do
       end
 
       context "イベントが存在しない場合" do
-        let(:params) { { url_path: event.url_path.split('').shuffle.join } }
+        let(:params) { { url_path: 'abc' } }
 
         it { is_expected.to redirect_to events_url }
       end
@@ -50,7 +50,7 @@ RSpec.describe EventsController, type: :controller do
     context "ログイン済みの場合" do
       before do
         event
-        log_in(event.user)
+        log_in(user)
       end
 
       it { is_expected.to be_successful }
@@ -77,7 +77,7 @@ RSpec.describe EventsController, type: :controller do
       end
 
       context "イベントが存在しない場合" do
-        let(:params) { { url_path: event.url_path.split('').shuffle.join } }
+        let(:params) { { url_path: 'abc' } }
 
         it { is_expected.to redirect_to events_url }
       end
@@ -155,7 +155,7 @@ RSpec.describe EventsController, type: :controller do
 
         context "イベントが存在しない場合" do
           let(:attributes) { { title: '飲み会テストタイトル' } }
-          let(:event_url_path) { event.url_path.split('').to_a.shuffle.join }
+          let(:event_url_path) { 'abc' }
 
           it { is_expected.to render_template(:edit) }
         end
@@ -195,7 +195,7 @@ RSpec.describe EventsController, type: :controller do
       end
 
       context "イベントが存在しない場合" do
-        let(:params) { { url_path: event.url_path.split('').to_a.shuffle.join } }
+        let(:params) { { url_path: 'abc' } }
 
         it { is_expected.to render_template(:index) }
       end
