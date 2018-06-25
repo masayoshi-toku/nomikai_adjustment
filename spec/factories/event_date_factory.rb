@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :event_date do
-    event_date '2018-01-01'
+    sequence(:event_date) { |n| Date.current.since(n.days).strftime('%Y/%m/%d') }
     association :event, factory: :event
   end
 end
