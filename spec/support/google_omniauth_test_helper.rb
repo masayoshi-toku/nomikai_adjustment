@@ -1,4 +1,4 @@
-module GoogleOmniauthHelper
+module GoogleOmniauthTestHelper
   OmniAuth.config.test_mode = true
 
   def google_mock(name:, email:, domain:)

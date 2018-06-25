@@ -10,7 +10,7 @@ class EventsController < ApplicationController
   end
 
   def new
-    @event = Event.new
+    @event_form = EventForm.new(event: Event.new)
   end
 
   def edit
@@ -18,10 +18,10 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new(event_params)
+    @event_form = EventForm.new(event_params.merge({ user: current_user }))
 
-    if @event.save
-      redirect_to @event, notice: 'Event was successfully created.'
+    if @event_form.event = @event_form.create
+      redirect_to @event_form.event, notice: 'Event was successfully created.'
     else
       render :new
     end
@@ -49,7 +49,7 @@ class EventsController < ApplicationController
     end
 
     def event_params
-      params.require(:event).permit(:user_id, :title, :url_path)
+      params.require(:event_form).permit(:title, :event_dates_text)
     end
 
     def exist_or_redirect(event)
