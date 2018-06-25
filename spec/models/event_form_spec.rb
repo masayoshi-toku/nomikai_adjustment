@@ -11,6 +11,12 @@ RSpec.describe EventForm, type: :model do
       it { expect(form.create).to be_truthy }
       it { expect { form.create }.to change { Event.count }.by(1) }
       it { expect { form.create }.to change { EventDate.count }.by(3) }
+
+      context "タイトルの文字数が100文字の場合" do
+        let(:attributes) { { title: "これは１０文字です。" * 10, event_dates_text: "2018/06/18\r\n2018/06/19\r\n2018/06/20" } }
+
+        it { expect(form.create).to be_truthy }
+      end
     end
 
     context "不正な値の場合" do
