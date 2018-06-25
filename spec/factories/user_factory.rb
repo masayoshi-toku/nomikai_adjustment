@@ -1,6 +1,14 @@
 FactoryBot.define do
+  sequence :email do |n|
+    "example#{n}@mwed.co.jp"
+  end
+
+  sequence :name do |n|
+    "Mr.example#{n}"
+  end
+
   factory :user do
-    name "Mr.example"
-    email "example@mwed.co.jp"
+    name
+    email
   end
 end
