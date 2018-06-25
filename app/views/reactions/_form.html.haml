@@ -1,10 +1,23 @@
-= form_for @reaction do |f|
-  - if @reaction.errors.any?
+= form_with(model: reaction_form, url: polymorphic_path(reaction_form.reaction), local: true) do |form|
+  - if reaction_form.reaction.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@reaction.errors.count, "error")} prohibited this reaction from being saved:"
+      %h2= "#{pluralize(reaction_form.reaction.errors.count, "error")} prohibited this reaction from being saved:"
       %ul
-        - @reaction.errors.full_messages.each do |message|
+        - reaction_form.reaction.errors.full_messages.each do |message|
           %li= message
-
+  = form.hidden_field :event_url_path, value: event_url_path
+  %table{ border: 1 }
+    %thead
+      %tr
+        %th 日程
+        %th ◯
+        %th △
+        %th ×
+    - event_dates.each do |event_date|
+      %tr
+        %th= event_date.event_date
+        %td= form.radio_button "status[#{event_date.id}]", 1
+        %td= form.radio_button "status[#{event_date.id}]", 2, { checked: true }
+        %td= form.radio_button "status[#{event_date.id}]", 3
   .actions
-    = f.submit 'Save'
+    = form.submit 'Save'

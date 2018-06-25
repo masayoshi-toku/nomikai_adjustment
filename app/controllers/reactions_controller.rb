@@ -1,8 +1,13 @@
 class ReactionsController < ApplicationController
   before_action :set_reaction, only: [:edit, :update, :destroy]
+  before_action :set_event, only: [:new, :create]
 
   def new
-    @reaction = Reaction.new
+    if @event
+      @reaction_form = ReactionForm.new(reaction: Reaction.new)
+    else
+      redirect_back(fallback_location: root_path, notice: 'イベントページが存在しません。')
+    end
   end
 
   def edit
