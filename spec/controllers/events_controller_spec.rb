@@ -84,12 +84,16 @@ RSpec.describe EventsController, type: :controller do
 
   describe "PUT #update" do
     context "正しいパラメーターの場合" do
-      before { put :update, params: { id: event.id, event_form: attributes } }
+      before do
+        old_title
+        put :update, params: { id: event.id, event_form: attributes }
+      end
 
-      let(:attributes) { { title: '飲み会テストタイトル2' } }
+      let(:old_title) { event.title }
+      let(:attributes) { { title: '新飲み会テストタイトル' } }
       let(:updated_event) { Event.find_by(title: attributes[:title]) }
 
-      it { expect(updated_event.title).to eq attributes[:title] }
+      it { expect(updated_event.title).not_to eq old_title }
 
       it { is_expected.to redirect_to updated_event }
     end
