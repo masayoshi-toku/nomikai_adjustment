@@ -36,7 +36,7 @@ class ReactionsController < ApplicationController
     end
 
     def reaction_params
-      params.require(:reaction_form).permit(:event_url_path, status: {})
+      params.require(:reaction_form).permit(:event_url_path, answer: {})
     end
 
     def exist_or_redirect(reaction)

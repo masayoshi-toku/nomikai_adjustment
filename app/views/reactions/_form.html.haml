@@ -16,8 +16,8 @@
     - event_dates.each do |event_date|
       %tr
         %th= event_date.event_date
-        %td= form.radio_button "status[#{event_date.id}]", 1
-        %td= form.radio_button "status[#{event_date.id}]", 2, { checked: true }
-        %td= form.radio_button "status[#{event_date.id}]", 3
+        %td= form.radio_button "answer[#{event_date.id}]", 1
+        %td= form.radio_button "answer[#{event_date.id}]", 2, { checked: true }
+        %td= form.radio_button "answer[#{event_date.id}]", 3
   .actions
     = form.submit 'Save'
