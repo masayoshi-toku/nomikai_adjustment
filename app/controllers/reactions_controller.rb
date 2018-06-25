@@ -15,21 +15,11 @@ class ReactionsController < ApplicationController
   end
 
   def create
-    @reaction = Reaction.new(reaction_params)
-
-    if @reaction.save
-      redirect_to event_url(@reaction.event), notice: '回答しました。'
-    else
-      render :new
-    end
-  end
-
-  def update
-    if @reaction&.update(reaction_params)
-      redirect_to event_url(@reaction.event), notice: 'Reaction was successfully updated.'
-    else
-      render :edit
-    end
+    @reaction_form = ReactionForm.new(reaction_params.merge(user: current_user))
+    @reaction_form.create
+    redirect_to event_url(@reaction_form.event_url_path)
+  rescue => e
+    redirect_to new_reaction_url(url_path: reaction_params[:event_url_path]), notice: '出席を登録する際にエラーが発生しました。'
   end
 
   def destroy
@@ -46,7 +36,7 @@ class ReactionsController < ApplicationController
     end
 
     def reaction_params
-      params.require(:reaction).permit(:user_id, :event_date_id, :status)
+      params.require(:reaction_form).permit(:event_url_path, status: {})
     end
 
     def exist_or_redirect(reaction)
