@@ -1,14 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe ReactionsController, type: :controller do
+  let(:user) { create(:user) }
+  let(:event_date) { create(:event_date) }
+  let(:reaction) { create(:reaction) }
+
   describe "GET #new" do
-    subject { get :new }
+    subject { get :new, params: { url_path: url_path } }
+    let(:event) { create(:event) }
+    let(:url_path) { event.url_path }
     it { is_expected.to be_successful }
   end
 
   describe "GET #edit" do
     subject { get :edit, params: {id: id} }
-    let(:reaction) { create(:reaction) }
 
     context "回答が存在する場合" do
       let(:id) { reaction.id }
@@ -22,66 +27,33 @@ RSpec.describe ReactionsController, type: :controller do
   end
 
   describe "POST #create" do
-    subject { post :create, params: { reaction: attributes } }
-    let(:reaction) { build(:reaction) }
+    subject { post :create, params: { reaction_form: attributes } }
+
+    before do
+      event_date
+      log_in(user)
+    end
 
     context "正しい値の場合" do
-      let(:attributes) { reaction.attributes }
+      let(:attributes) { { event_url_path: event_date.event.url_path, status: { "#{event_date.id}": '3' } } }
       it { expect{ subject }.to change{ Reaction.count }.by(1) }
 
       it "イベント詳細ページへリダイレクトする" do
-        event = reaction.event
-        expect(subject).to redirect_to event
+        event_url_path = event_date.event.url_path
+        expect(subject).to redirect_to event_path(event_url_path)
       end
     end
 
     context "不正な値の場合" do
-      let(:attributes) { reaction.attributes.merge(status: 10) }
+      let(:attributes) { { event_url_path: event_date.event.url_path, status: { "#{event_date.id}": '10' } } }
 
-      it { is_expected.to render_template(:new) }
-    end
-  end
-
-  describe "PUT #update" do
-    subject { put :update, params: { id: id, reaction: attributes } }
-    let(:reaction) { create(:reaction) }
-
-    context "回答が存在する場合" do
-      let(:id) { reaction.id }
-
-      context "正しい値の場合" do
-        let(:attributes) { reaction.attributes.merge(status: 2) }
-        let(:event) { reaction.event }
-        before { subject }
-
-        it "回答の更新が成功する" do
-          reaction.reload
-          updated_reaction = Reaction.find_by(id: reaction.id)
-          expect(updated_reaction.status).to eq 2
-        end
-
-        it { is_expected.to redirect_to event }
-      end
-
-      context "不正な値の場合" do
-        before { subject }
-        let(:attributes) { reaction.attributes.merge(status: 10) }
-
-        it { is_expected.to render_template(:edit) }
-      end
-    end
-
-    context "存在しない場合" do
-      let(:id) { 10 }
-      let(:attributes) { reaction.attributes.merge(status: 2) }
-      it { is_expected.to render_template(:edit) }
+      it { is_expected.to redirect_to new_reaction_url(url_path: event_date.event.url_path) }
     end
   end
 
   describe "DELETE #destroy" do
     subject { delete :destroy, params: { id: id } }
     before { reaction }
-    let(:reaction) { create(:reaction) }
     let(:event) { reaction.event }
 
     context "回答が存在する場合" do
