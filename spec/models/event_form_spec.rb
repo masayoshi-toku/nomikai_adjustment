@@ -34,7 +34,7 @@ RSpec.describe EventForm, type: :model do
       end
 
       context "タイトルの文字数が100文字より多い場合" do
-        let(:attributes) { { title: "これは１５文字のタイトルです。" * 7, event_dates_text: "2018/06/18\r\n2018/06/19\r\n2018/06/20" } }
+        let(:attributes) { { title: "これは１０文字です。" * 10 + 'あ', event_dates_text: "2018/06/18\r\n2018/06/19\r\n2018/06/20" } }
 
         it { expect(form.create).to be_falsey }
       end
