@@ -17,7 +17,7 @@ class EventForm
     end
 
     def url_path
-      @url_path ||= SecureRandom.urlsafe_base64
+      SecureRandom.urlsafe_base64
     end
 
     def event_dates
