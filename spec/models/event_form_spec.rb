@@ -18,6 +18,13 @@ RSpec.describe EventForm, type: :model do
 
         it { is_expected.to be_truthy }
       end
+
+      context "日付に同じテキストが含まれていた場合" do
+        let(:attributes) { { title: "第一回飲み会", event_dates_text: "2018/06/18\r\n2018/06/18\r\n2018/06/20" } }
+
+        it { expect { subject }.to change { Event.count }.by(1) }
+        it { expect { subject }.to change { EventDate.count }.by(2) }
+      end
     end
 
     context "不正な値の場合" do
