@@ -26,9 +26,10 @@ RSpec.describe EventDate, type: :model do
       end
 
       context "同じイベントに同じ日付が作成された時" do
-        before { create(:event_date) }
-        let(:attributes) { attributes_for(:event_date) }
-        it { expect{ subject }.to raise_error(ActiveRecord::RecordInvalid) }
+        let(:event_date) { create(:event_date) }
+        let(:dup_event_date) { event_date.dup }
+        let(:attributes) { dup_event_date.attributes }
+        it { is_expected.to be_invalid }
       end
     end
   end
