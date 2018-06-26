@@ -22,7 +22,7 @@ RSpec.describe ReactionForm, type: :model do
     end
 
     context "不正な値の場合" do
-      context "statusが空の場合" do
+      context "answerが空の場合" do
         let(:answer) do
           answer = {}
           answer["#{event_date.id}"] = ''
