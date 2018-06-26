@@ -6,7 +6,8 @@
   = @event.title
 %ul
   - @event.event_dates.each do |event_date|
-    %li= event_date.event_date  
-= link_to 'Edit', edit_event_path(@event)
+    %li= event_date.event_date
+%input{ type: 'text', size: 25, onfocus: 'this.select();', value: event_url(@event.url_path) }
+= link_to 'Edit', edit_event_path(@event.url_path)
 |
 = link_to 'Back', events_path
