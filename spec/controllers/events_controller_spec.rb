@@ -118,6 +118,13 @@ RSpec.describe EventsController, type: :controller do
 
           it { is_expected.to render_template(:new) }
         end
+
+        context "タイトルと日付が空の場合" do
+          before { log_in(user) }
+          let(:attributes) { { title: '', event_dates_text: '' } }
+
+          it { is_expected.to render_template(:new) }
+        end
       end
     end
 
