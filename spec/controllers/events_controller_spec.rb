@@ -145,7 +145,10 @@ RSpec.describe EventsController, type: :controller do
         let(:attributes) { { title: '新飲み会テストタイトル' } }
         let(:updated_event) { Event.find_by(url_path: event.url_path) }
 
-        it { expect(updated_event.title).not_to eq old_title }
+        it :aggregate_failures do
+          expect(updated_event.title).not_to eq old_title
+          expect(updated_event.title).to eq attributes[:title]
+        end
 
         it { is_expected.to redirect_to updated_event }
       end
