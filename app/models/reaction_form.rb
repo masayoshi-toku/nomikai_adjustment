@@ -9,16 +9,14 @@ class ReactionForm
 
   def create
     return false if invalid?
-    transaction(user, answer)
+    save_reaction(user, answer)
   end
 
   private
-    def transaction(user, answer)
-      ActiveRecord::Base.transaction do
-        answer.each do |event_date_id, status|
-          reaction = user.reactions.new(user: user, event_date_id: event_date_id, status: status)
-          reaction.save!
-        end
+    def save_reaction(user, answer)
+      answer.each do |event_date_id, status|
+        user.reactions.new(event_date_id: event_date_id, status: status)
       end
+      user.save
     end
 end

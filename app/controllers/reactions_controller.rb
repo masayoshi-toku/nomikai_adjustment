@@ -16,17 +16,18 @@ class ReactionsController < ApplicationController
 
   def create
     @reaction_form = ReactionForm.new(reaction_params.merge(user: current_user))
-    @reaction_form.create
-    redirect_to event_url(@reaction_form.event_url_path)
-  rescue => e
-    redirect_to new_reaction_url(url_path: reaction_params[:event_url_path]), notice: '出席を登録する際にエラーが発生しました。'
+    if @reaction_form.create
+      redirect_to event_url(@reaction_form.event_url_path)
+    else
+      redirect_to new_reaction_url(url_path: reaction_params[:event_url_path]), notice: '出席の登録に失敗しました。'
+    end
   end
 
   def destroy
     if @reaction&.destroy
-      redirect_to event_url(@reaction.event), notice: 'Reaction was successfully destroyed.'
+      redirect_to event_url(@reaction.event), notice: '回答を削除しました。'
     else
-      redirect_to root_url
+      redirect_to root_url, notice: '回答を削除できませんでした'
     end
   end
 
