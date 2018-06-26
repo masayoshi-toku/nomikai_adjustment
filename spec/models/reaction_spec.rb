@@ -22,8 +22,13 @@ RSpec.describe Reaction, type: :model do
         end
 
         context "値が1~3以外である時" do
-          [4..10].each do |status|
-            let(:attribute) { status }
+          context "値が0の時" do
+            let(:attribute) { 0 }
+            it { is_expected.to be_invalid }
+          end
+
+          context "値が4の時" do
+            let(:attribute) { 4 }
             it { is_expected.to be_invalid }
           end
         end
