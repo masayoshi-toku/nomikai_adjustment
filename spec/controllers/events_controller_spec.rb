@@ -112,9 +112,17 @@ RSpec.describe EventsController, type: :controller do
 
       context "不正なパラメーターの場合" do
         subject { post :create, params: { event_form: attributes } }
+        render_views
 
         context "タイトルが空の場合" do
           let(:attributes) { { title: '', event_dates_text: "2018/06/18\r\n2018/06/19\r\n2018/06/20" } }
+
+          it { is_expected.to render_template(:new) }
+        end
+
+        context "タイトルと日付が空の場合" do
+          before { log_in(user) }
+          let(:attributes) { { title: '', event_dates_text: '' } }
 
           it { is_expected.to render_template(:new) }
         end
