@@ -6,7 +6,7 @@ class ReactionsController < ApplicationController
     if @event
       @reaction_form = ReactionForm.new(reaction: Reaction.new)
     else
-      redirect_back(fallback_location: root_path, notice: 'イベントページが存在しません。')
+      redirect_to root_url
     end
   end
 
