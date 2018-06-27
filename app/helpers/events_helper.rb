@@ -25,8 +25,8 @@ module EventsHelper
       @undecided = 0
       @unavailable = 0
 
-      event_date.reactions.each do |reaction|
-        case reaction.status
+      event_date.reactions.pluck(:status).each do |status|
+        case status
         when 1
           mark = '◯'
           @available += 1
