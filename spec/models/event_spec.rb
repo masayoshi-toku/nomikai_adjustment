@@ -39,4 +39,20 @@ RSpec.describe Event, type: :model do
       end
     end
   end
+
+  describe "#answerers" do
+    subject { event.answerers }
+    let(:user) { create(:user) }
+    let(:second_user) { create(:user) }
+    let(:event) { create(:event) }
+    let(:event_date) { create(:event_date, event: event) }
+    let(:reaction) { create(:reaction, event_date: event_date, user: user) }
+    let(:second_reaction) { create(:reaction, event_date: event_date, user: second_user) }
+    before do
+      reaction
+      second_reaction
+    end
+
+    it { is_expected.to eq [user.name, second_user.name] }
+  end
 end

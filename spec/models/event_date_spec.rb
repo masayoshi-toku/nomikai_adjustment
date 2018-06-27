@@ -33,4 +33,17 @@ RSpec.describe EventDate, type: :model do
       end
     end
   end
+
+  describe "#count_status" do
+    subject { event_date.count_status }
+    before do
+      reaction
+      second_reaction
+    end
+    let(:event_date) { create(:event_date) }
+    let(:reaction) { create(:reaction, event_date: event_date, status: 1) }
+    let(:second_reaction) { create(:reaction, event_date: event_date, status: 2) }
+
+    it { is_expected.to eq [1, 1, 0]}
+  end
 end
