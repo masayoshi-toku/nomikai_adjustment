@@ -51,6 +51,10 @@ class EventsController < ApplicationController
       params.require(:event_form).permit(:title, :event_dates_text)
     end
 
+    def set_event
+      @event = Event.find_by(url_path: params[:url_path])
+    end
+
     def exist_or_redirect(event)
       unless event
         redirect_to events_url

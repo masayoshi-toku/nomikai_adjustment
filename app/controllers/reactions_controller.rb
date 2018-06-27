@@ -36,6 +36,10 @@ class ReactionsController < ApplicationController
       @reaction = Reaction.find_by(id: params[:id])
     end
 
+    def set_event
+      @event = Event.find_by(url_path: params[:event_url_path])
+    end
+
     def reaction_params
       params.require(:reaction_form).permit(:event_url_path, answer: {})
     end
