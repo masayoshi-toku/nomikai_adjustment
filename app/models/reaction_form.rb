@@ -9,11 +9,11 @@ class ReactionForm
 
   def create
     return false if invalid?
-    save_reaction(user, answer)
+    save_reaction
   end
 
   private
-    def save_reaction(user, answer)
+    def save_reaction
       answer.each do |event_date_id, status|
         user.reactions.new(event_date_id: event_date_id, status: status)
       end
