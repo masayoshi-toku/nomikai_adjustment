@@ -1,6 +1,6 @@
 class EventDate < ApplicationRecord
   belongs_to :event
-  has_many :reactions
+  has_many :reactions, dependent: :destroy
   validates :event_date, presence: true, uniqueness: { scope: :event_id }
 
   def count_status
