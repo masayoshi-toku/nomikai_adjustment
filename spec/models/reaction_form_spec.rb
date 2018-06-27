@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ReactionForm, type: :model do
   describe "#create" do
+    subject { form.create }
     before { event_date }
     let(:form) { ReactionForm.new(attributes.merge({ user: user })) }
     let(:user) { create(:user) }
@@ -17,8 +18,8 @@ RSpec.describe ReactionForm, type: :model do
     end
 
     context "正しい値の場合" do
-      it { expect(form.create).to be_truthy }
-      it { expect { form.create }.to change { Reaction.count }.by(2) }
+      it { is_expected.to be_truthy }
+      it { expect { subject }.to change { Reaction.count }.by(2) }
     end
 
     context "不正な値の場合" do
@@ -28,19 +29,19 @@ RSpec.describe ReactionForm, type: :model do
           answer["#{event_date.id}"] = ''
         end
 
-        it { expect(form.create).to be_falsey }
+        it { is_expected.to be_falsey }
       end
 
       context "ユーザーが不明の場合" do
         before { form.user = nil }
 
-        it { expect(form.create).to be_falsey }
+        it { is_expected.to be_falsey }
       end
 
       context "eventのURLが空の場合" do
         before { form.event_url_path = '' }
 
-        it { expect(form.create).to be_falsey }
+        it { is_expected.to be_falsey }
       end
     end
   end
