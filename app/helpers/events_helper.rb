@@ -6,7 +6,7 @@ module EventsHelper
   def answerers(event)
     @answerers = []
     first_event_date = event.event_dates.first
-    first_event_date_reactions = Reaction.where(event_date_id: event_date.id)
+    first_event_date_reactions = Reaction.where(event_date_id: first_event_date.id)
 
     first_event_date_reactions.each do |first_event_date_reaction|
       @answerers << first_event_date_reaction.user.name
