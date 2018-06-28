@@ -1,4 +1,4 @@
 %h1 Editing reaction
 
 = render 'edit_form', reaction_form: @reaction_form, event_dates: @event.event_dates, event_url_path: @event.url_path
-= link_to 'Back', event_path(@event)
+= link_to 'Back', event_path(@event.url_path)

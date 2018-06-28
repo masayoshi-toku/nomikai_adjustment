@@ -1,4 +1,4 @@
-= form_with(model: reaction_form, url: event_reactions_path(event_url_path), local: true) do |form|
+= form_with(model: reaction_form, url: event_reaction_path(@event.url_path), local: true) do |form|
   - if reaction_form.reaction.errors.any?
     #error_explanation
       %h2= "#{pluralize(reaction_form.reaction.errors.count, "error")} prohibited this reaction from being saved:"
