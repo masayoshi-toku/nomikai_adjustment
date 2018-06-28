@@ -3,5 +3,5 @@ class User < ApplicationRecord
   VALID_DOMAIN_REGEX = /@mwed.co.jp\z/
   validates :email, presence: true, uniqueness: true, format: { with: VALID_DOMAIN_REGEX }
   has_many :events
-  has_many :reactions 
+  has_many :reactions
 end
