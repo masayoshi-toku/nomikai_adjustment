@@ -1,12 +1,19 @@
 %p
-  %strong User:
-  = @event.user_id
-%p
-  %strong Title:
-  = @event.title
-%ul
+  %strong= @event.title
+%table{ border: 1 }
+  %thead
+    %tr
+      %th 日程
+      %th ◯
+      %th △
+      %th ×
   - @event.event_dates.each do |event_date|
-    %li= event_date.event_date
+    %tr
+      %th= event_date.event_date
+      %td
+      %td
+      %td
+= link_to '出席を入力する', new_event_reaction_path(@event.url_path)
 %input{ type: 'text', size: 25, onfocus: 'this.select();', value: event_url(@event.url_path) }
 = link_to 'Edit', edit_event_path(@event.url_path)
 |

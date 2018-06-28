@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root to: 'sessions#new'
   resources :users, only: [:index, :show, :destroy]
-  resources :events, param: 'url_path'
+  resources :events, param: 'url_path' do
+    resources :reactions, except: [:index, :show]
+  end
   get "/auth/google_oauth2", as: "google_auth"
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/login', to: 'sessions#new'
