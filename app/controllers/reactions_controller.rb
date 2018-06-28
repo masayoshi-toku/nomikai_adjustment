@@ -1,5 +1,5 @@
 class ReactionsController < ApplicationController
-  before_action :set_event
+  before_action :set_event, :logged_in?
 
   def new
     initialize_reaction_form_object
