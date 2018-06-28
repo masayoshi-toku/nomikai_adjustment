@@ -23,8 +23,9 @@
           %td 0
           %td 0
 
-= link_to '出席を入力する', new_event_reaction_path(@event.url_path)
+- if @event.answerers.include?(@current_user.name)
+  = link_to '出席を修正する', edit_event_reaction_path(@event.url_path)
+- else
+  = link_to '出席を登録する', new_event_reaction_path(@event.url_path)
 %input{ type: 'text', size: 25, onfocus: 'this.select();', value: event_url(@event.url_path) }
-= link_to 'Edit', edit_event_path(@event.url_path)
-|
 = link_to 'Back', events_path
