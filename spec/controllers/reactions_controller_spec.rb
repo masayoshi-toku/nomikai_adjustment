@@ -47,7 +47,7 @@ RSpec.describe ReactionsController, type: :controller do
     context "不正な値の場合" do
       let(:attributes) { { answer: { "#{event_date.id}": '10' } } }
 
-      it { is_expected.to redirect_to new_event_reaction_url(event.url_path) }
+      it { is_expected.to redirect_to new_event_reactions_url(event.url_path) }
     end
   end
 end
