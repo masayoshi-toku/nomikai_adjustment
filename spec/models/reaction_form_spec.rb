@@ -9,7 +9,7 @@ RSpec.describe ReactionForm, type: :model do
     let(:event) { create(:event) }
     let(:event_date) { create(:event_date, event: event) }
     let(:second_event_date) { create(:event_date, event: event) }
-    let(:attributes) { { event_url_path: event.url_path, answer: answer } }
+    let(:attributes) { { answer: answer } }
     let(:answer) do
       answer = {}
       answer["#{event_date.id}"] = '2'
@@ -34,12 +34,6 @@ RSpec.describe ReactionForm, type: :model do
 
       context "ユーザーが不明の場合" do
         before { form.user = nil }
-
-        it { is_expected.to be_falsey }
-      end
-
-      context "eventのURLが空の場合" do
-        before { form.event_url_path = '' }
 
         it { is_expected.to be_falsey }
       end

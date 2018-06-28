@@ -1,10 +1,9 @@
 class ReactionForm
   include ActiveModel::Model
 
-  attr_accessor :user, :reaction, :answer, :event_url_path
+  attr_accessor :user, :reaction, :answer
 
   validates :answer, presence: true
-  validates :event_url_path, presence: true
   validates :user, presence: true
 
   def create
