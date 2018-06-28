@@ -14,3 +14,4 @@
         %td= form.radio_button "answer[#{event_date.id}]", 3
   .actions
     = form.submit 'Save'
+  = link_to 'Destroy', event_reactions_path(event_url_path), method: :delete, data: { confirm: 'Are you sure?' }
