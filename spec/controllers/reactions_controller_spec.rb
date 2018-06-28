@@ -50,4 +50,35 @@ RSpec.describe ReactionsController, type: :controller do
       it { is_expected.to redirect_to new_event_reactions_url(event.url_path) }
     end
   end
+
+  describe "PUT #update" do
+    before do
+      reaction
+      log_in(user)
+      put :update, params: { reaction_form: attributes, event_url_path: event.url_path }
+    end
+
+    context "正しい値の場合" do
+      before { old_status }
+      let(:old_status) { reaction.status }
+      let(:attributes) { { answer: { "#{event_date.id}": '3' } } }
+      let(:updated_reaction) { Reaction.find_by(id: reaction.id) }
+
+      it :aggregate_failures do
+        expect(updated_reaction.status).not_to eq old_status
+        expect(updated_reaction.status).to eq 3
+      end
+
+      it "イベント詳細ページへリダイレクトする" do
+        event_url_path = event.url_path
+        expect(response).to redirect_to event_path(event_url_path)
+      end
+    end
+
+    context "不正な値の場合" do
+      let(:attributes) { { answer: { "#{event_date.id}": '10' } } }
+
+      it { is_expected.to redirect_to edit_event_reactions_path(event.url_path) }
+    end
+  end
 end

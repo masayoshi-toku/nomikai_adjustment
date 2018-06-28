@@ -39,4 +39,68 @@ RSpec.describe ReactionForm, type: :model do
       end
     end
   end
+
+  describe "#update" do
+    subject { form.update }
+    before do
+      event
+      reaction
+      second_reaction
+    end
+
+    let(:form) { ReactionForm.new(attributes.merge({ user: user })) }
+    let(:user) { create(:user) }
+    let(:event) { create(:event) }
+    let(:event_date) { create(:event_date, event: event) }
+    let(:second_event_date) { create(:event_date, event: event) }
+    let(:reaction) { create(:reaction, event_date: event_date, user: user) }
+    let(:second_reaction) { create(:reaction, event_date: second_event_date, user: user) }
+    let(:attributes) { { answer: answer } }
+
+    let(:answer) do
+      answer = {}
+      answer["#{event_date.id}"] = '2'
+      answer["#{second_event_date.id}"] = '3'
+      answer
+    end
+
+    context "正しい値の場合" do
+      before do
+        old_status
+        second_old_status
+      end
+
+      let(:old_status) { reaction.status }
+      let(:second_old_status) { second_reaction.status }
+      let(:updated_reaction) { Reaction.find_by(id: reaction.id) }
+      let(:updated_second_reaction) { Reaction.find_by(id: second_reaction.id) }
+
+      it { is_expected.to be_truthy }
+
+      it :aggregate_failures do
+        subject
+        expect(updated_reaction.status).not_to eq old_status
+        expect(updated_reaction.status).to eq 2
+        expect(updated_second_reaction.status).not_to eq second_old_status
+        expect(updated_second_reaction.status).to eq 3
+      end
+    end
+
+    context "不正な値の場合" do
+      context "answerが空の場合" do
+        let(:answer) do
+          answer = {}
+          answer["#{event_date.id}"] = ''
+        end
+
+        it { is_expected.to be_falsey }
+      end
+
+      context "ユーザーが不明の場合" do
+        before { form.user = nil }
+
+        it { is_expected.to be_falsey }
+      end
+    end
+  end
 end
