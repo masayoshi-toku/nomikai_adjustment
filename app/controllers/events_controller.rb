@@ -14,6 +14,10 @@ class EventsController < ApplicationController
     @event_form = EventForm.new(event: Event.new)
   end
 
+  def edit
+    @event_form = EventForm.new(event: @event)
+  end
+
   def create
     @event_form = EventForm.new(event_params.merge({ user: current_user }))
 
