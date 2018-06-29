@@ -40,8 +40,8 @@ RSpec.describe ReactionForm, type: :model do
     end
   end
 
-  describe "#update" do
-    subject { form.update }
+  describe "#update_or_create" do
+    subject { form.update_or_create }
     before do
       event
       reaction
@@ -83,6 +83,23 @@ RSpec.describe ReactionForm, type: :model do
         expect(updated_reaction.status).to eq 2
         expect(updated_second_reaction.status).not_to eq second_old_status
         expect(updated_second_reaction.status).to eq 3
+      end
+
+      context "回答済みの候補日と未回答の候補日が混在している時" do
+        let(:third_event_date) { create(:event_date, event: event) }
+        before { answer["#{third_event_date.id}"] = '1' }
+
+        it :aggregate_failures do
+          subject
+          expect(updated_reaction.status).not_to eq old_status
+          expect(updated_reaction.status).to eq 2
+          expect(updated_second_reaction.status).not_to eq second_old_status
+          expect(updated_second_reaction.status).to eq 3
+        end
+
+        it "既存の回答は更新され、新しい回答は作成される" do
+          expect{ subject }.to change { Reaction.count }.by(1)
+        end
       end
     end
 
