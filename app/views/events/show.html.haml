@@ -23,7 +23,7 @@
           %td 0
           %td 0
 
-- if @event.answerers.include?(@current_user.name)
+- if @event.answerers&.include?(@current_user.name)
   = link_to '出席を修正する', edit_event_reactions_path(@event.url_path)
 - else
   = link_to '出席を登録する', new_event_reactions_path(@event.url_path)
