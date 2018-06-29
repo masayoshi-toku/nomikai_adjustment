@@ -7,7 +7,9 @@ class Event < ApplicationRecord
 
   def answerers
     first_event_date = event_dates.first
-    @answerers = first_event_date.reactions.order(:id).map { |reaction| reaction.user.name }
-    @answerers
+    if first_event_date
+      @answerers = first_event_date.reactions.order(:id).map { |reaction| reaction.user.name }
+      @answerers
+    end  
   end
 end
