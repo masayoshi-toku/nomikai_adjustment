@@ -2,11 +2,11 @@ class ReactionsController < ApplicationController
   before_action :set_event, only: [:new, :edit, :create]
 
   def new
-    initialize_form_object
+    initialize_reaction_form_object
   end
 
   def edit
-    initialize_form_object
+    initialize_reaction_form_object
   end
 
   def create
@@ -19,7 +19,7 @@ class ReactionsController < ApplicationController
   end
 
   private
-    def initialize_form_object
+    def initialize_reaction_form_object
       if @event
         @reaction_form = ReactionForm.new(reaction: Reaction.new)
       else
