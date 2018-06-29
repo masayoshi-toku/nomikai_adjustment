@@ -11,9 +11,9 @@ class ReactionForm
     create_reaction
   end
 
-  def update
+  def update_or_create
     return false if invalid?
-    update_reaction
+    update_or_create_reaction
   end
 
   private
@@ -24,12 +24,22 @@ class ReactionForm
       user.save
     end
 
-    def update_reaction
+    def update_or_create_reaction
+      @new_reaction_flag = 0
       answer.each do |event_date_id, status|
         reaction = user.reactions.find_by(event_date_id: event_date_id)
-        unless reaction.update(status: status)
-          return false
+        if reaction.present?
+          return false unless reaction.update(status: status)
+        else
+          @new_reaction_flag = 1
+          user.reactions.new(event_date_id: event_date_id, status: status)
         end
       end
+
+      if @new_reaction_flag == 1
+        user.save
+      end
+
+      return true
     end
 end
