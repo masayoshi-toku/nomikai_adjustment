@@ -1,9 +1,9 @@
 = form_with(model: reaction_form, url: event_reactions_path(event_url_path), method: :patch, local: true) do |form|
-  - if reaction_form.reaction.errors.any?
+  - if reaction_form.errors.any?
     #error_explanation
-      %h2= "#{pluralize(reaction_form.reaction.errors.count, "error")} prohibited this reaction from being saved:"
+      %h2= "#{pluralize(reaction_form.errors.count, "error")} prohibited this reaction from being saved:"
       %ul
-        - reaction_form.reaction.errors.full_messages.each do |message|
+        - reaction_form.errors.full_messages.each do |message|
           %li= message
   %table{ border: 1 }
     %thead

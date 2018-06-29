@@ -1,7 +1,7 @@
 class ReactionForm
   include ActiveModel::Model
 
-  attr_accessor :user, :reaction, :answer
+  attr_accessor :user, :answer
 
   validates :answer, presence: true
   validates :user, presence: true

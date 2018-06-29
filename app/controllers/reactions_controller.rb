@@ -21,7 +21,7 @@ class ReactionsController < ApplicationController
   private
     def initialize_reaction_form_object
       if @event
-        @reaction_form = ReactionForm.new(reaction: Reaction.new)
+        @reaction_form = ReactionForm.new
       else
         redirect_to root_url, notice: 'イベントが存在しません。'
       end
