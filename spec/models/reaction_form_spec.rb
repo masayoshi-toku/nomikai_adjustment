@@ -64,16 +64,16 @@ RSpec.describe ReactionForm, type: :model do
       answer
     end
 
+    let(:old_status) { reaction.status }
+    let(:second_old_status) { second_reaction.status }
+    let(:updated_reaction) { Reaction.find_by(id: reaction.id) }
+    let(:updated_second_reaction) { Reaction.find_by(id: second_reaction.id) }
+
     context "正しい値の場合" do
       before do
         old_status
         second_old_status
       end
-
-      let(:old_status) { reaction.status }
-      let(:second_old_status) { second_reaction.status }
-      let(:updated_reaction) { Reaction.find_by(id: reaction.id) }
-      let(:updated_second_reaction) { Reaction.find_by(id: second_reaction.id) }
 
       it { is_expected.to be_truthy }
 
@@ -117,6 +117,28 @@ RSpec.describe ReactionForm, type: :model do
         before { form.user = nil }
 
         it { is_expected.to be_falsey }
+      end
+
+      context "正しい値と不正な値が混在している時" do
+        let(:third_event_date) { create(:event_date, event: event) }
+        let(:third_reaction) { Reaction.find_by(event_date_id: third_event_date.id) }
+
+        before do
+          answer["#{third_event_date.id}"] = '10'
+          old_status
+          second_old_status
+        end
+
+        it { is_expected.to be_falsey }
+
+        it :aggregate_failures do
+          subject
+          expect(updated_reaction.status).to eq old_status
+          expect(updated_reaction.status).not_to eq 2
+          expect(updated_second_reaction.status).to eq second_old_status
+          expect(updated_second_reaction.status).not_to eq 3
+          expect(third_reaction).to eq nil
+        end
       end
     end
   end
