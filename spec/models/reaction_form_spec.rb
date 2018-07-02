@@ -117,7 +117,7 @@ RSpec.describe ReactionForm, type: :model do
         it { is_expected.to be_falsey }
       end
 
-      context "正しい値と不正な値が混在している時" do
+      context "既存の回答の更新は成功するが、新しい回答の登録が失敗する時" do
         let(:third_event_date) { create(:event_date, event: event) }
         let(:third_reaction) { Reaction.find_by(event_date_id: third_event_date.id) }
 
@@ -135,6 +135,30 @@ RSpec.describe ReactionForm, type: :model do
           expect(updated_reaction.status).not_to eq 2
           expect(updated_second_reaction.status).to eq second_old_status
           expect(updated_second_reaction.status).not_to eq 3
+          expect(third_reaction).to eq nil
+        end
+      end
+
+      context "新しい回答の登録は成功するが、既存の回答の更新が失敗する時" do
+        let(:third_event_date) { create(:event_date, event: event) }
+        let(:third_reaction) { Reaction.find_by(event_date_id: third_event_date.id) }
+
+        before do
+          answer["#{event_date.id}"] = '2'
+          answer["#{second_event_date.id}"] = '10'
+          answer["#{third_event_date.id}"] = '1'
+          old_status
+          second_old_status
+        end
+
+        it { is_expected.to be_falsey }
+
+        it :aggregate_failures do
+          subject
+          expect(updated_reaction.status).to eq old_status
+          expect(updated_reaction.status).not_to eq 2
+          expect(updated_second_reaction.status).to eq second_old_status
+          expect(updated_second_reaction.status).not_to eq 10
           expect(third_reaction).to eq nil
         end
       end
