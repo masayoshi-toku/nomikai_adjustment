@@ -66,12 +66,27 @@ RSpec.describe EventsController, type: :controller do
     context "ログイン済みの場合" do
       before do
         event
-        log_in(user)
+        log_in(login_user)
       end
 
       context "イベントが存在する場合" do
-        let(:url_path) { event.url_path }
-        it { is_expected.to be_successful }
+        context "ユーザーがイベント作成者の場合" do
+          let(:login_user) { user }
+          let(:url_path) { event.url_path }
+          it { is_expected.to be_successful }
+        end
+
+        context "ユーザーがイベント作成者じゃない場合" do
+          let(:login_user) { create(:user) }
+          let(:url_path) { event.url_path }
+          it { is_expected.to redirect_to events_url  }
+        end
+      end
+
+      context "イベントが存在しない場合" do
+        let(:login_user) { user }
+        let(:url_path) { 'abc' }
+        it { is_expected.to redirect_to events_url }
       end
     end
 
