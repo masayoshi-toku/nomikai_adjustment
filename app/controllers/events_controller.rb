@@ -1,13 +1,12 @@
 class EventsController < ApplicationController
   before_action :logged_in?, except: [:index]
-  before_action :set_event, except: [:index, :new, :create]
+  before_action :set_event, :exist_or_redirect, except: [:index, :new, :create]
 
   def index
     @events = Event.all
   end
 
   def show
-    exist_or_redirect(@event)
   end
 
   def new
@@ -55,9 +54,9 @@ class EventsController < ApplicationController
       @event = Event.find_by(url_path: params[:url_path])
     end
 
-    def exist_or_redirect(event)
-      unless event
-        redirect_to events_url
+    def exist_or_redirect
+      unless @event.present?
+        redirect_to events_url and return
       end
     end
 end
