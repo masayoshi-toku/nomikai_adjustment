@@ -30,10 +30,11 @@ class EventsController < ApplicationController
   end
 
   def update
-    if @event&.update(event_params)
-      redirect_to @event, notice: 'Event was successfully updated.'
+    @event_form = EventForm.new(edit_event_params.merge({ user: current_user, event: @event }))
+    if @event_form.update
+      redirect_to event_path(@event_form.event.url_path), notice: 'イベントの更新に成功しました。'
     else
-      render :edit
+      redirect_to edit_event_url(@event.url_path), notice: 'イベントの更新に失敗しました。'
     end
   end
 
@@ -48,6 +49,10 @@ class EventsController < ApplicationController
   private
     def event_params
       params.require(:event_form).permit(:title, :event_dates_text)
+    end
+
+    def edit_event_params
+      params.require(:event_form).permit(:title, :event_dates_text, deletable_event_dates: {})
     end
 
     def set_event
