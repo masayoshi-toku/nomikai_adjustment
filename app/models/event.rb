@@ -6,10 +6,10 @@ class Event < ApplicationRecord
   validates :url_path, presence: true, uniqueness: true
 
   def answerers
-    first_event_date = event_dates.first
-    if first_event_date
-      @answerers = first_event_date.reactions.order(:id).map { |reaction| reaction.user.name }
+    if event_dates.present?
+      @answerers = []
+      event_dates.each { |event_date| @answerers |= event_date.reactions.map { |reaction| reaction.user.name } }
       @answerers
-    end  
+    end
   end
 end
