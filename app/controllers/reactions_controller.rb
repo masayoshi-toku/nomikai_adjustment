@@ -36,7 +36,7 @@ class ReactionsController < ApplicationController
         redirect_to event_url(@event.url_path), notice: '出席の削除に失敗しました。'
       end
     else
-      redirect_to root_path, notice: '出席の削除に失敗しました。'
+      redirect_to root_path, notice: 'イベントが存在しません。'
     end
   end
 
