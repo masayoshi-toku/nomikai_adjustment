@@ -1,5 +1,5 @@
 class ReactionsController < ApplicationController
-  before_action :set_event, only: [:new, :edit, :create]
+  before_action :set_event, only: [:new, :edit, :create, :update]
 
   def new
     initialize_reaction_form_object
@@ -15,6 +15,15 @@ class ReactionsController < ApplicationController
       redirect_to event_url(@event.url_path), notice: '出席の登録に成功しました。'
     else
       redirect_to new_event_reactions_url(@event.url_path), notice: '出席の登録に失敗しました。'
+    end
+  end
+
+  def update
+    @reaction_form = ReactionForm.new(reaction_params.merge(user: current_user))
+    if @reaction_form.update_or_create
+      redirect_to event_url(@event.url_path), notice: '出席の更新に成功しました。'
+    else
+      redirect_to edit_event_reactions_path(@event.url_path), notice: '出席の更新に失敗しました。'
     end
   end
 
