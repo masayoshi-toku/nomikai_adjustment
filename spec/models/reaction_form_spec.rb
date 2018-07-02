@@ -56,14 +56,12 @@ RSpec.describe ReactionForm, type: :model do
     let(:reaction) { create(:reaction, event_date: event_date, user: user) }
     let(:second_reaction) { create(:reaction, event_date: second_event_date, user: user) }
     let(:attributes) { { answer: answer } }
-
     let(:answer) do
       answer = {}
       answer["#{event_date.id}"] = '2'
       answer["#{second_event_date.id}"] = '3'
       answer
     end
-
     let(:old_status) { reaction.status }
     let(:second_old_status) { second_reaction.status }
     let(:updated_reaction) { Reaction.find_by(id: reaction.id) }
