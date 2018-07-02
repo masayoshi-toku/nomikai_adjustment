@@ -112,7 +112,7 @@ RSpec.describe EventsController, type: :controller do
         it "イベントの詳細ページへリダイレクトする" do
           subject.call
           event = Event.find_by(title: valid_attributes[:title])
-          expect(response).to redirect_to event_path(event.url_path)
+          expect(response).to redirect_to event_url(event.url_path)
         end
       end
 
@@ -138,7 +138,7 @@ RSpec.describe EventsController, type: :controller do
     context "ログインしていない場合" do
       subject { post :create, params: { event_form: valid_attributes } }
 
-      it { is_expected.to redirect_to root_path }
+      it { is_expected.to redirect_to root_url }
     end
   end
 
