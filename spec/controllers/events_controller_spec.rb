@@ -60,6 +60,27 @@ RSpec.describe EventsController, type: :controller do
     end
   end
 
+  describe "GET #edit" do
+    subject { get :edit, params: { url_path: url_path } }
+
+    context "ログイン済みの場合" do
+      before do
+        event
+        log_in(user)
+      end
+
+      context "イベントが存在する場合" do
+        let(:url_path) { event.url_path }
+        it { is_expected.to be_successful }
+      end
+    end
+
+    context "ログインしていない場合" do
+      let(:url_path) { event.url_path }
+      it { is_expected.to redirect_to root_url }
+    end
+  end
+
   describe "POST #create" do
     context "ログイン済みの場合" do
       before do
