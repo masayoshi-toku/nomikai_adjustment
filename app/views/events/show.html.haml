@@ -10,7 +10,7 @@
       - @event.answerers&.each do |name|
         %th= name
   %tbody
-    - @event.event_dates.order(:created_at).each do |event_date|
+    - @event.event_dates.each do |event_date|
       %tr
         %th= event_date.event_date
         - if event_date.reactions.present?
