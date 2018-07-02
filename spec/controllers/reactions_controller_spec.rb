@@ -117,7 +117,7 @@ RSpec.describe ReactionsController, type: :controller do
       context "正しい値の場合" do
         let(:url_path) { event.url_path }
 
-        it { expect{subject}.to change{ Reaction.count }.by(-1) }
+        it { expect{ subject }.to change{ Reaction.count }.by(-1) }
         it { is_expected.to redirect_to event_url(url_path) }
       end
 
