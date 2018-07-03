@@ -211,7 +211,7 @@ RSpec.describe EventsController, type: :controller do
             deleted_event_date = EventDate.find_by(id: event_date.id)
             created_event_date = EventDate.find_by(event_date: other_event_date.event_date)
             expect(deleted_event_date).to be nil
-            expect(created_event_date).to be_truthy
+            expect(created_event_date).not_to be nil
           end
         end
       end
