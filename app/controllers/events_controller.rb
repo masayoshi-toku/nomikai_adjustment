@@ -1,10 +1,10 @@
 class EventsController < ApplicationController
-  before_action :logged_in?, except: [:index]
+  before_action :logged_in?
   before_action :set_event, :exist_or_redirect, except: [:index, :new, :create]
   before_action :event_owner?, only: [:edit, :update, :destroy]
 
   def index
-    @events = Event.all
+    @user_events = current_user.events
   end
 
   def show
