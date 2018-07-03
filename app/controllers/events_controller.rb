@@ -1,13 +1,12 @@
 class EventsController < ApplicationController
   before_action :logged_in?, except: [:index]
-  before_action :set_event, except: [:index, :new, :create]
+  before_action :set_event, :exist_or_redirect, except: [:index, :new, :create]
 
   def index
     @events = Event.all
   end
 
   def show
-    exist_or_redirect(@event)
   end
 
   def new
@@ -31,10 +30,11 @@ class EventsController < ApplicationController
   end
 
   def update
-    if @event&.update(event_params)
-      redirect_to @event, notice: 'Event was successfully updated.'
+    @event_form = EventForm.new(edit_event_params.merge({ user: current_user, event: @event }))
+    if @event_form.update
+      redirect_to event_path(@event_form.event.url_path), notice: 'イベントの更新に成功しました。'
     else
-      render :edit
+      redirect_to edit_event_url(@event.url_path), notice: 'イベントの更新に失敗しました。'
     end
   end
 
@@ -51,12 +51,16 @@ class EventsController < ApplicationController
       params.require(:event_form).permit(:title, :event_dates_text)
     end
 
+    def edit_event_params
+      params.require(:event_form).permit(:title, :event_dates_text, deletable_event_dates: {})
+    end
+
     def set_event
       @event = Event.find_by(url_path: params[:url_path])
     end
 
-    def exist_or_redirect(event)
-      unless event
+    def exist_or_redirect
+      unless @event.present?
         redirect_to events_url
       end
     end

@@ -10,7 +10,7 @@
       - @event.answerers&.each do |name|
         %th= name
   %tbody
-    - @event.event_dates.each do |event_date|
+    - @event.event_dates.order(:created_at).each do |event_date|
       %tr
         %th= event_date.event_date
         - if event_date.reactions.present?
@@ -22,7 +22,7 @@
           %td 0
           %td 0
           %td 0
-
+%br
 - if @event.answerers&.include?(@current_user.name)
   = link_to '出席を修正する', edit_event_reactions_path(@event.url_path)
 - else
