@@ -18,27 +18,36 @@ class EventForm
   private
     def update_reaction
       ActiveRecord::Base.transaction do
-        if title.present?
-          event.update!(title: title)
-        end
-
-        if deletable_event_dates.present?
-          checked_deletable_event_dates = deletable_event_dates.delete_if { |key, value| value == '0' }
-          if checked_deletable_event_dates.present?
-            event.event_dates.where(id: checked_deletable_event_dates.keys).each(&:destroy!)
-          end
-        end
-
-        if event_dates_text.present?
-          event_dates.each do |event_date|
-            event.event_dates.new(event_date)
-          end
-          event.save!
-        end
-
+        title_update
+        delete_event_dates
+        update_or_create_event_dates
         return true
       rescue ActiveRecord::RecordNotDestroyed, ActiveRecord::RecordInvalid
         return false
+      end
+    end
+
+    def title_update
+      if title.present?
+        event.update!(title: title)
+      end
+    end
+
+    def delete_event_dates
+      if deletable_event_dates.present?
+        checked_deletable_event_dates = deletable_event_dates.delete_if { |key, value| value == '0' }
+        if checked_deletable_event_dates.present?
+          event.event_dates.where(id: checked_deletable_event_dates.keys).each(&:destroy!)
+        end
+      end
+    end
+
+    def update_or_create_event_dates
+      if event_dates_text.present?
+        event_dates.each do |event_date|
+          event.event_dates.new(event_date)
+        end
+        event.save!
       end
     end
 
