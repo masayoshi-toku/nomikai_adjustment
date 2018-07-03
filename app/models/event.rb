@@ -7,9 +7,7 @@ class Event < ApplicationRecord
 
   def answerers
     if event_dates.present?
-      @answerers = []
-      event_dates.each { |event_date| @answerers |= event_date.reactions.map { |reaction| reaction.user.name } }
-      @answerers
+      event_dates.inject(Array.new) { |answerers, event_date| answerers |= event_date.reactions.map { |reaction| reaction.user.name } }
     end
   end
 end
