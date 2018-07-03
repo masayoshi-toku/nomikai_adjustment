@@ -2,6 +2,7 @@ class EventDate < ApplicationRecord
   belongs_to :event
   has_many :reactions, dependent: :destroy
   validates :event_date, presence: true, uniqueness: { scope: :event_id }
+  scope :created_at_asc, -> { order(:created_at) }
 
   def count_status
     all_status = reactions.pluck(:status)
