@@ -1,0 +1,22 @@
+= form_with(model: event_form, url: event_path(event_url_path), method: :patch, local: true) do |form|
+  - if event_form.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(event_form.errors.count, "error")
+        prohibited this event_form from being saved:
+      %ul
+        - event_form.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = form.label 'イベント名'
+    = form.text_field :title, value: @event.title
+  %p 削除する項目
+  - event_dates.each do |event_date|
+    .field
+      = form.check_box "event_dates[#{event_date.event_date}]"
+      = event_date.event_date
+  .field
+    = form.label '追加する候補'
+    = form.text_area :event_dates_text, size: '30x10', placeholder: '候補日程／日時を入力してください。候補の区切りは改行で判断されます。'
+  .actions
+    = form.submit '更新'

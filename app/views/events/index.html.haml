@@ -12,7 +12,5 @@
           %td= event.user_id
           %td= event.title
           %td= link_to 'Show', event_path(event.url_path)
-          %td= link_to 'Edit', edit_event_path(event.url_path)
-          %td= link_to 'Destroy', event_path(event.url_path), method: :delete, data: { confirm: 'Are you sure?' }
 %br/
 = link_to 'New Event', new_event_path
