@@ -277,7 +277,7 @@ RSpec.describe EventsController, type: :controller do
 
   describe "DELETE #destroy" do
     subject { delete :destroy, params: params }
-    before{ event }
+    before { event }
 
     context "ログイン済みの場合" do
       before do
