@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     @user = User.find_or_create_by(user_params)
 
     if @user.valid?
-      login_and_redirect @user, '成功しました。'
+      login_and_redirect @user, 'ログインに成功しました。'
     else
       redirect_back(fallback_location: root_path, notice: '無効なアカウントです。')
     end
@@ -31,7 +31,7 @@ class SessionsController < ApplicationController
 
     def login_and_redirect(user, notice)
       session[:user_id] = user.id
-      redirect_to user, notice: notice
+      redirect_to events_url, notice: notice
     end
 
     def logout_and_redirect
