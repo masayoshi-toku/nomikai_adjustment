@@ -218,15 +218,13 @@ RSpec.describe EventsController, type: :controller do
               expect(updated_event.title).to eq attributes[:title]
             end
 
-            it { expect{ subject }.to change{ EventDate.count }.by(0) }
-          end
-
-          it :aggregate_failures do
-            expect{ subject }.to change{ EventDate.count }.by(0)
-            deleted_event_date = EventDate.find_by(id: event_date.id)
-            created_event_date = EventDate.find_by(event_date: other_event_date.event_date)
-            expect(deleted_event_date).to be nil
-            expect(created_event_date).not_to be nil
+            it :aggregate_failures do
+              expect{ subject }.to change{ EventDate.count }.by(0)
+              deleted_event_date = EventDate.find_by(id: event_date.id)
+              created_event_date = EventDate.find_by(event_date: other_event_date.event_date)
+              expect(deleted_event_date).to be nil
+              expect(created_event_date).not_to be nil
+            end
           end
         end
 
