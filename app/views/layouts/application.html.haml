@@ -13,5 +13,5 @@
       = link_to "#{current_user.name}さん", user_path(current_user)
       としてログイン中です。
       = link_to 'ログアウト', logout_path, method: :delete
-    %hr
+      %hr
     = yield
