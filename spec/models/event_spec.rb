@@ -66,8 +66,8 @@ RSpec.describe Event, type: :model do
     end
 
     context "ユーザーがイベント作成者じゃない場合" do
-      let(:second_user) { create(:user) }
-      let(:event) { create(:event, user: second_user) }
+      let(:another_user) { create(:user) }
+      let(:event) { create(:event, user: another_user) }
       it { is_expected.to be false}
     end
   end
