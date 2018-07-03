@@ -169,22 +169,18 @@ RSpec.describe EventsController, type: :controller do
             let(:attributes) { { title: '新飲み会テストタイトル' } }
 
             it :aggregate_failures do
-              subject
+              is_expected.to redirect_to event_url(updated_event.url_path)
               expect(updated_event.title).not_to eq old_title
               expect(updated_event.title).to eq attributes[:title]
             end
-
-            it { is_expected.to redirect_to event_url(updated_event.url_path) }
           end
 
           context "タイトルを変更し、日付を削除する場合" do
-            let(:second_event_date) { create(:event_date, event: event) }
+            let!(:second_event_date) { create(:event_date, event: event) }
             let(:attributes) { { title: '新飲み会テストタイトル', deletable_event_dates: deletable_event_dates } }
 
-            before { second_event_date }
-
             it :aggregate_failures do
-              subject
+              is_expected.to redirect_to event_url(updated_event.url_path)
               expect(updated_event.title).not_to eq old_title
               expect(updated_event.title).to eq attributes[:title]
             end
@@ -197,7 +193,7 @@ RSpec.describe EventsController, type: :controller do
             let(:attributes) { { title: '新飲み会テストタイトル', event_dates_text: other_event_date.event_date } }
 
             it :aggregate_failures do
-              subject
+              is_expected.to redirect_to event_url(updated_event.url_path)
               expect(updated_event.title).not_to eq old_title
               expect(updated_event.title).to eq attributes[:title]
             end
@@ -217,7 +213,7 @@ RSpec.describe EventsController, type: :controller do
             let(:attributes) { { title: '新飲み会テストタイトル', event_dates_text: other_event_date.event_date, deletable_event_dates: deletable_event_dates } }
 
             it :aggregate_failures do
-              subject
+              is_expected.to redirect_to event_url(updated_event.url_path)
               expect(updated_event.title).not_to eq old_title
               expect(updated_event.title).to eq attributes[:title]
             end

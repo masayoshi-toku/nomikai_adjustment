@@ -73,10 +73,8 @@ RSpec.describe ReactionForm, type: :model do
         second_old_status
       end
 
-      it { is_expected.to be_truthy }
-
       it :aggregate_failures do
-        subject
+        is_expected.to be_truthy
         expect(updated_reaction.status).not_to eq old_status
         expect(updated_reaction.status).to eq 2
         expect(updated_second_reaction.status).not_to eq second_old_status
@@ -88,7 +86,7 @@ RSpec.describe ReactionForm, type: :model do
         before { answer["#{third_event_date.id}"] = '1' }
 
         it :aggregate_failures do
-          subject
+          is_expected.to be_truthy
           expect(updated_reaction.status).not_to eq old_status
           expect(updated_reaction.status).to eq 2
           expect(updated_second_reaction.status).not_to eq second_old_status
@@ -127,10 +125,8 @@ RSpec.describe ReactionForm, type: :model do
           second_old_status
         end
 
-        it { is_expected.to be_falsey }
-
         it :aggregate_failures do
-          subject
+          is_expected.to be_falsey
           expect(updated_reaction.status).to eq old_status
           expect(updated_reaction.status).not_to eq 2
           expect(updated_second_reaction.status).to eq second_old_status
@@ -151,10 +147,8 @@ RSpec.describe ReactionForm, type: :model do
           second_old_status
         end
 
-        it { is_expected.to be_falsey }
-
         it :aggregate_failures do
-          subject
+          is_expected.to be_falsey
           expect(updated_reaction.status).to eq old_status
           expect(updated_reaction.status).not_to eq 2
           expect(updated_second_reaction.status).to eq second_old_status
