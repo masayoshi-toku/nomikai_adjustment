@@ -59,15 +59,18 @@ RSpec.describe SessionsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    before do
-      request.env['omniauth.auth'] = google_mock(valid_attributes)
-      get :create, params: { provider: 'google_auth2' }
+    subject { delete :destroy }
+
+    context "ログイン済みの場合" do
+      let(:user) { create(:user) }
+      before { log_in(user) }
+
+      it { expect(is_logged_in?).to be true }
+      it { is_expected.to redirect_to root_url }
     end
 
-    it "ログアウトできる" do
-      expect(is_logged_in?).to be true
-      delete :destroy
-      expect(is_logged_in?).to be false
+    context "ログインをしていない場合" do
+      it { is_expected.to redirect_to root_url }
     end
   end
 end
