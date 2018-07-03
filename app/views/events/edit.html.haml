@@ -1,5 +1,5 @@
 %h1 Editing Event
-= render 'edit_form', event_form: @event_form, event_dates: @event.event_dates
+= render 'edit_form', event_form: @event_form, event_dates: @event.event_dates, event_url_path: @event.url_path
 = link_to 'Show', @event
 |
 = link_to 'Back', events_path
