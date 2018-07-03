@@ -1,5 +1,5 @@
 class ReactionsController < ApplicationController
-  before_action :set_event, only: [:new, :edit, :create, :update]
+  before_action :set_event
 
   def new
     initialize_reaction_form_object
@@ -24,6 +24,19 @@ class ReactionsController < ApplicationController
       redirect_to event_url(@event.url_path), notice: '出席の更新に成功しました。'
     else
       redirect_to edit_event_reactions_path(@event.url_path), notice: '出席の更新に失敗しました。'
+    end
+  end
+
+  def destroy
+    if @event
+      event_reactions = current_user.reactions.where(event_date_id: @event.event_dates.ids)
+      if Reaction.destroy(event_reactions.ids)
+        redirect_to event_url(@event.url_path), notice: '出席の削除に成功しました。'
+      else
+        redirect_to event_url(@event.url_path), notice: '出席の削除に失敗しました。'
+      end
+    else
+      redirect_to root_path, notice: '出席の削除に失敗しました。'
     end
   end
 
