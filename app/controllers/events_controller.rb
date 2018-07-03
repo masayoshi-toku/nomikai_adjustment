@@ -61,7 +61,7 @@ class EventsController < ApplicationController
 
     def exist_or_redirect
       unless @event.present?
-        redirect_to events_url and return
+        redirect_to events_url
       end
     end
 end
