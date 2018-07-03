@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   before_action :logged_in?, except: [:index]
   before_action :set_event, :exist_or_redirect, except: [:index, :new, :create]
-  before_action :correct_user?, only: [:edit, :update, :destroy]
+  before_action :event_owner?, only: [:edit, :update, :destroy]
 
   def index
     @events = Event.all
@@ -65,9 +65,7 @@ class EventsController < ApplicationController
       end
     end
 
-    def correct_user?
-      unless current_user == @event.user
-        redirect_to events_url, notice: 'イベントを編集する権限がありません。' and return
-      end
+    def event_owner?
+      redirect_to events_url, notice: 'イベントを編集する権限がありません。' and return unless @event.owner?(current_user)
     end
 end
