@@ -9,4 +9,7 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
     %p#notice= notice
+    - if current_user.present?
+      = "#{current_user.name}さんとしてログイン中です。"
+      = link_to 'ログアウト', logout_path, method: :delete
     = yield
