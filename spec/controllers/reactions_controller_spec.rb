@@ -76,8 +76,7 @@ RSpec.describe ReactionsController, type: :controller do
       end
 
       context "正しい値の場合" do
-        before { old_status }
-        let(:old_status) { reaction.status }
+        let!(:old_status) { reaction.status }
         let(:attributes) { { answer: { "#{event_date.id}": '3' } } }
         let(:updated_reaction) { Reaction.find_by(id: reaction.id) }
 

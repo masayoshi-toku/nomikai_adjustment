@@ -3,11 +3,10 @@ require 'rails_helper'
 RSpec.describe ReactionForm, type: :model do
   describe "#create" do
     subject { form.create }
-    before { event_date }
     let(:form) { ReactionForm.new(attributes.merge({ user: user })) }
     let(:user) { create(:user) }
     let(:event) { create(:event) }
-    let(:event_date) { create(:event_date, event: event) }
+    let!(:event_date) { create(:event_date, event: event) }
     let(:second_event_date) { create(:event_date, event: event) }
     let(:attributes) { { answer: answer } }
     let(:answer) do
