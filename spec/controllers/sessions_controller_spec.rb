@@ -65,8 +65,11 @@ RSpec.describe SessionsController, type: :controller do
       let(:user) { create(:user) }
       before { log_in(user) }
 
-      it { expect(is_logged_in?).to be true }
-      it { is_expected.to redirect_to root_url }
+      it "ログアウトに成功する" do
+        expect(is_logged_in?).to be true
+        is_expected.to redirect_to root_url
+        expect(is_logged_in?).to be false
+      end
     end
 
     context "ログインをしていない場合" do
