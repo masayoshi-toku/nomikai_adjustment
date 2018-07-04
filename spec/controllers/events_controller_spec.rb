@@ -66,12 +66,27 @@ RSpec.describe EventsController, type: :controller do
     context "ログイン済みの場合" do
       before do
         event
-        log_in(user)
+        log_in(login_user)
       end
 
       context "イベントが存在する場合" do
-        let(:url_path) { event.url_path }
-        it { is_expected.to be_successful }
+        context "ユーザーがイベント作成者の場合" do
+          let(:login_user) { user }
+          let(:url_path) { event.url_path }
+          it { is_expected.to be_successful }
+        end
+
+        context "ユーザーがイベント作成者じゃない場合" do
+          let(:login_user) { create(:user) }
+          let(:url_path) { event.url_path }
+          it { is_expected.to redirect_to events_url  }
+        end
+      end
+
+      context "イベントが存在しない場合" do
+        let(:login_user) { user }
+        let(:url_path) { 'abc' }
+        it { is_expected.to redirect_to events_url }
       end
     end
 
@@ -97,7 +112,7 @@ RSpec.describe EventsController, type: :controller do
         it "イベントの詳細ページへリダイレクトする" do
           subject.call
           event = Event.find_by(title: valid_attributes[:title])
-          expect(response).to redirect_to event_path(event.url_path)
+          expect(response).to redirect_to event_url(event.url_path)
         end
       end
 
@@ -123,7 +138,7 @@ RSpec.describe EventsController, type: :controller do
     context "ログインしていない場合" do
       subject { post :create, params: { event_form: valid_attributes } }
 
-      it { is_expected.to redirect_to root_path }
+      it { is_expected.to redirect_to root_url }
     end
   end
 
@@ -135,115 +150,120 @@ RSpec.describe EventsController, type: :controller do
 
       before do
         event_date
-        log_in(user)
+        log_in(login_user)
       end
 
-      context "正しいパラメーターの場合" do
-        let(:old_title) { event.title }
-        let(:updated_event) { Event.find_by(url_path: event.url_path) }
-        let(:deletable_event_dates) do
-          deletable_event_dates = {}
-          deletable_event_dates["#{event_date.id}"] = '1'
-          deletable_event_dates
-        end
+      context "ユーザーがイベント作成者の場合" do
+        let(:login_user) { user }
 
-        before { old_title }
-
-        context "タイトルを変更する時" do
-          let(:attributes) { { title: '新飲み会テストタイトル' } }
-
-          it :aggregate_failures do
-            subject
-            expect(updated_event.title).not_to eq old_title
-            expect(updated_event.title).to eq attributes[:title]
-          end
-
-          it { is_expected.to redirect_to event_url(updated_event.url_path) }
-        end
-
-        context "タイトルを変更し、日付を削除する場合" do
-          let(:second_event_date) { create(:event_date, event: event) }
-          let(:attributes) { { title: '新飲み会テストタイトル', deletable_event_dates: deletable_event_dates } }
-
-          before { second_event_date }
-
-          it :aggregate_failures do
-            subject
-            expect(updated_event.title).not_to eq old_title
-            expect(updated_event.title).to eq attributes[:title]
-          end
-
-          it { expect{ subject }.to change{ EventDate.count }.by(-1) }
-        end
-
-        context "タイトルを変更し、日付を追加する場合" do
-          let(:other_event_date) { build(:event_date, event: event) }
-          let(:attributes) { { title: '新飲み会テストタイトル', event_dates_text: other_event_date.event_date } }
-
-          it :aggregate_failures do
-            subject
-            expect(updated_event.title).not_to eq old_title
-            expect(updated_event.title).to eq attributes[:title]
-          end
-
-          it { expect{ subject }.to change{ EventDate.count }.by(1) }
-        end
-
-        context "日付の追加と削除を同時に行う場合" do
-          let(:other_event_date) { build(:event_date) }
-          let(:attributes) { { event_dates_text: other_event_date.event_date, deletable_event_dates: deletable_event_dates } }
-
-          it { expect{ subject }.to change{ EventDate.count }.by(0) }
-        end
-
-        context "タイトルの変更と日付の追加と削除を同時に行う場合" do
-          let(:other_event_date) { build(:event_date) }
-          let(:attributes) { { title: '新飲み会テストタイトル', event_dates_text: other_event_date.event_date, deletable_event_dates: deletable_event_dates } }
-
-          it :aggregate_failures do
-            subject
-            expect(updated_event.title).not_to eq old_title
-            expect(updated_event.title).to eq attributes[:title]
-          end
-
-          it :aggregate_failures do
-            expect{ subject }.to change{ EventDate.count }.by(0)
-            deleted_event_date = EventDate.find_by(id: event_date.id)
-            created_event_date = EventDate.find_by(event_date: other_event_date.event_date)
-            expect(deleted_event_date).to be nil
-            expect(created_event_date).not_to be nil
-          end
-        end
-      end
-
-      context "不正なパラメーターの場合" do
-        subject { put :update, params: { url_path: event_url_path, event_form: attributes } }
-
-        context "イベントが存在しない場合" do
-          let(:attributes) { { title: '飲み会テストタイトル' } }
-          let(:event_url_path) { 'abc' }
-
-          it { is_expected.to redirect_to events_url }
-        end
-
-        context "日付がすでに存在している場合" do
-          let(:attributes) { { title: '飲み会テストタイトル', event_dates_text: event_date.event_date } }
-          let(:event_url_path) { event.url_path }
-
-          it { is_expected.to redirect_to edit_event_url(event.url_path) }
-        end
-
-        context "存在しない日付を削除する場合" do
-          let(:attributes) { { title: '飲み会テストタイトル', deletable_event_dates: deletable_event_dates } }
-          let(:event_url_path) { event.url_path }
+        context "正しいパラメーターの場合" do
+          let!(:old_title) { event.title }
+          let(:updated_event) { Event.find_by(url_path: event.url_path) }
           let(:deletable_event_dates) do
             deletable_event_dates = {}
-            deletable_event_dates[100] = '1'
+            deletable_event_dates["#{event_date.id}"] = '1'
             deletable_event_dates
           end
 
-          it { is_expected.to redirect_to event_url(event.url_path) }
+          context "タイトルを変更する時" do
+            let(:attributes) { { title: '新飲み会テストタイトル' } }
+
+            it :aggregate_failures do
+              is_expected.to redirect_to event_url(updated_event.url_path)
+              expect(updated_event.title).not_to eq old_title
+              expect(updated_event.title).to eq attributes[:title]
+            end
+          end
+
+          context "タイトルを変更し、日付を削除する場合" do
+            let!(:second_event_date) { create(:event_date, event: event) }
+            let(:attributes) { { title: '新飲み会テストタイトル', deletable_event_dates: deletable_event_dates } }
+
+            it :aggregate_failures do
+              is_expected.to redirect_to event_url(updated_event.url_path)
+              expect(updated_event.title).not_to eq old_title
+              expect(updated_event.title).to eq attributes[:title]
+            end
+
+            it { expect{ subject }.to change{ EventDate.count }.by(-1) }
+          end
+
+          context "タイトルを変更し、日付を追加する場合" do
+            let(:other_event_date) { build(:event_date, event: event) }
+            let(:attributes) { { title: '新飲み会テストタイトル', event_dates_text: other_event_date.event_date } }
+
+            it :aggregate_failures do
+              is_expected.to redirect_to event_url(updated_event.url_path)
+              expect(updated_event.title).not_to eq old_title
+              expect(updated_event.title).to eq attributes[:title]
+            end
+
+            it { expect{ subject }.to change{ EventDate.count }.by(1) }
+          end
+
+          context "日付の追加と削除を同時に行う場合" do
+            let(:other_event_date) { build(:event_date) }
+            let(:attributes) { { event_dates_text: other_event_date.event_date, deletable_event_dates: deletable_event_dates } }
+
+            it { expect{ subject }.to change{ EventDate.count }.by(0) }
+          end
+
+          context "タイトルの変更と日付の追加と削除を同時に行う場合" do
+            let(:other_event_date) { build(:event_date) }
+            let(:attributes) { { title: '新飲み会テストタイトル', event_dates_text: other_event_date.event_date, deletable_event_dates: deletable_event_dates } }
+
+            it :aggregate_failures do
+              is_expected.to redirect_to event_url(updated_event.url_path)
+              expect(updated_event.title).not_to eq old_title
+              expect(updated_event.title).to eq attributes[:title]
+            end
+
+            it :aggregate_failures do
+              expect{ subject }.to change{ EventDate.count }.by(0)
+              deleted_event_date = EventDate.find_by(id: event_date.id)
+              created_event_date = EventDate.find_by(event_date: other_event_date.event_date)
+              expect(deleted_event_date).to be nil
+              expect(created_event_date).not_to be nil
+            end
+          end
         end
+
+        context "不正なパラメーターの場合" do
+          subject { put :update, params: { url_path: event_url_path, event_form: attributes } }
+
+          context "イベントが存在しない場合" do
+            let(:attributes) { { title: '飲み会テストタイトル' } }
+            let(:event_url_path) { 'abc' }
+
+            it { is_expected.to redirect_to events_url }
+          end
+
+          context "日付がすでに存在している場合" do
+            let(:attributes) { { title: '飲み会テストタイトル', event_dates_text: event_date.event_date } }
+            let(:event_url_path) { event.url_path }
+
+            it { is_expected.to redirect_to edit_event_url(event.url_path) }
+          end
+
+          context "存在しない日付を削除する場合" do
+            let(:attributes) { { title: '飲み会テストタイトル', deletable_event_dates: deletable_event_dates } }
+            let(:event_url_path) { event.url_path }
+            let(:deletable_event_dates) do
+              deletable_event_dates = {}
+              deletable_event_dates[100] = '1'
+              deletable_event_dates
+            end
+
+            it { is_expected.to redirect_to event_url(event.url_path) }
+          end
+        end
+      end
+
+      context "ユーザーがイベント作成者じゃない場合" do
+        let(:login_user) { create(:user) }
+        let(:attributes) { { title: '新飲み会テストタイトル' } }
+
+        it { is_expected.to redirect_to events_url }
       end
     end
 
@@ -251,7 +271,7 @@ RSpec.describe EventsController, type: :controller do
       subject { put :update, params: { url_path: event.url_path, event_form: attributes } }
       let(:attributes) { { title: '飲み会テストタイトル' } }
 
-      it { is_expected.to redirect_to root_path }
+      it { is_expected.to redirect_to root_url }
     end
   end
 

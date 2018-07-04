@@ -10,4 +10,8 @@ class Event < ApplicationRecord
       event_dates.inject(Array.new) { |answerers, event_date| answerers |= event_date.reactions.map { |reaction| reaction.user.name } }
     end
   end
+
+  def owner?(check_user)
+    user == check_user
+  end
 end

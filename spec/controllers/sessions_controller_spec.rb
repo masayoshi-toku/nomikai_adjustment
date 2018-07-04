@@ -36,12 +36,12 @@ RSpec.describe SessionsController, type: :controller do
         it { expect{ subject }.to change { User.count }.by(1) }
 
         it "ログインに成功する" do
-          subject
+          is_expected.to be_truthy
           expect(is_logged_in?).to be true
         end
 
         it "ユーザー詳細ページへリダイレクトする" do
-          subject
+          is_expected.to be_truthy
           user = User.find_by(email: other_valid_attributes[:email])
           expect(response).to redirect_to user
         end

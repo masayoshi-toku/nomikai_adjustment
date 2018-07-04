@@ -3,11 +3,10 @@ require 'rails_helper'
 RSpec.describe ReactionForm, type: :model do
   describe "#create" do
     subject { form.create }
-    before { event_date }
     let(:form) { ReactionForm.new(attributes.merge({ user: user })) }
     let(:user) { create(:user) }
     let(:event) { create(:event) }
-    let(:event_date) { create(:event_date, event: event) }
+    let!(:event_date) { create(:event_date, event: event) }
     let(:second_event_date) { create(:event_date, event: event) }
     let(:attributes) { { answer: answer } }
     let(:answer) do
@@ -73,10 +72,8 @@ RSpec.describe ReactionForm, type: :model do
         second_old_status
       end
 
-      it { is_expected.to be_truthy }
-
       it :aggregate_failures do
-        subject
+        is_expected.to be_truthy
         expect(updated_reaction.status).not_to eq old_status
         expect(updated_reaction.status).to eq 2
         expect(updated_second_reaction.status).not_to eq second_old_status
@@ -88,7 +85,7 @@ RSpec.describe ReactionForm, type: :model do
         before { answer["#{third_event_date.id}"] = '1' }
 
         it :aggregate_failures do
-          subject
+          is_expected.to be_truthy
           expect(updated_reaction.status).not_to eq old_status
           expect(updated_reaction.status).to eq 2
           expect(updated_second_reaction.status).not_to eq second_old_status
@@ -127,10 +124,8 @@ RSpec.describe ReactionForm, type: :model do
           second_old_status
         end
 
-        it { is_expected.to be_falsey }
-
         it :aggregate_failures do
-          subject
+          is_expected.to be_falsey
           expect(updated_reaction.status).to eq old_status
           expect(updated_reaction.status).not_to eq 2
           expect(updated_second_reaction.status).to eq second_old_status
@@ -151,10 +146,8 @@ RSpec.describe ReactionForm, type: :model do
           second_old_status
         end
 
-        it { is_expected.to be_falsey }
-
         it :aggregate_failures do
-          subject
+          is_expected.to be_falsey
           expect(updated_reaction.status).to eq old_status
           expect(updated_reaction.status).not_to eq 2
           expect(updated_second_reaction.status).to eq second_old_status

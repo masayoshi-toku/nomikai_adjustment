@@ -55,4 +55,20 @@ RSpec.describe Event, type: :model do
 
     it { is_expected.to eq [user.name, second_user.name] }
   end
+
+  describe "#owner?" do
+    subject { event.owner?(user) }
+    let(:user) { create(:user) }
+
+    context "ユーザーがイベント作成者の場合" do
+      let(:event) { create(:event, user: user) }
+      it { is_expected.to be true}
+    end
+
+    context "ユーザーがイベント作成者じゃない場合" do
+      let(:another_user) { create(:user) }
+      let(:event) { create(:event, user: another_user) }
+      it { is_expected.to be false}
+    end
+  end
 end
