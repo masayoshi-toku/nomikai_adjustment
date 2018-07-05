@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  before_action :logged_in?, only: [:destroy]
+
   def new
     @user = User.new
   end
@@ -14,8 +16,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
-    redirect_to root_url
+    logout_and_redirect
   end
 
   private
@@ -31,5 +32,10 @@ class SessionsController < ApplicationController
     def login_and_redirect(user, notice)
       session[:user_id] = user.id
       redirect_to user, notice: notice
+    end
+
+    def logout_and_redirect
+      session[:user_id] = nil
+      redirect_to root_url, notice: 'ログアウトしました。'
     end
 end
