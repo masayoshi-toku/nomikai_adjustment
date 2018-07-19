@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'events#index'
+  root to: 'sessions#new'
   resources :users, only: [:index, :show, :destroy]
   resources :events, param: 'url_path' do
     resource :reactions

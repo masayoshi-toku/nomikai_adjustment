@@ -2,6 +2,9 @@ class SessionsController < ApplicationController
   before_action :logged_in?, only: [:destroy]
 
   def new
+    if session[:user_id].present?
+      redirect_to events_path
+    end
     @user = User.new
   end
 
