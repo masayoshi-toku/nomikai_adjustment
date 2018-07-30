@@ -11,7 +11,15 @@ RSpec.describe EventsController, type: :controller do
   describe "GET #index" do
     subject { get :index }
 
-    it { is_expected.to be_successful }
+    context "ログイン済みの場合" do
+      before { log_in(user) }
+
+      it { is_expected.to be_successful }
+    end
+
+    context "ログインしていない場合" do
+      it { is_expected.to redirect_to root_url }
+    end
   end
 
   describe "GET #show" do

@@ -1,16 +1,14 @@
-%h1 Events
+%h1 イベント一覧
 %table
   %thead
     %tr
-      %th User
-      %th Title
+      %th イベント名
       %th{:colspan => "3"}
   %tbody
-    - if @events
-      - @events.each do |event|
+    - if @user_events
+      - @user_events.each do |event|
         %tr
-          %td= event.user_id
           %td= event.title
-          %td= link_to 'Show', event_path(event.url_path)
+          %td= link_to '詳細', event_path(event.url_path)
 %br/
-= link_to 'New Event', new_event_path
+= link_to '新規作成', new_event_path

@@ -20,9 +20,9 @@ RSpec.describe SessionsController, type: :controller do
 
       it { expect(is_logged_in?).to be true }
 
-      it "ユーザー詳細ページへリダイレクトする" do
+      it "イベント一覧ページへリダイレクトする" do
         user = User.find_by(email: valid_attributes[:email])
-        expect(response).to redirect_to user
+        expect(response).to redirect_to events_url
       end
     end
 
@@ -40,10 +40,10 @@ RSpec.describe SessionsController, type: :controller do
           expect(is_logged_in?).to be true
         end
 
-        it "ユーザー詳細ページへリダイレクトする" do
+        it "イベント一覧ページへリダイレクトする" do
           is_expected.to be_truthy
           user = User.find_by(email: other_valid_attributes[:email])
-          expect(response).to redirect_to user
+          expect(response).to redirect_to events_url
         end
       end
 

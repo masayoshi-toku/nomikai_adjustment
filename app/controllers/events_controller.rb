@@ -1,13 +1,14 @@
 class EventsController < ApplicationController
-  before_action :logged_in?, except: [:index]
+  before_action :logged_in?
   before_action :set_event, :exist_or_redirect, except: [:index, :new, :create]
   before_action :event_owner?, only: [:edit, :update, :destroy]
 
   def index
-    @events = Event.all
+    @user_events = current_user.events.latest
   end
 
   def show
+    @event_dates = @event.event_dates.latest
   end
 
   def new
@@ -22,7 +23,7 @@ class EventsController < ApplicationController
     @event_form = EventForm.new(event_params.merge({ user: current_user }))
     if @event_form.valid?
       @event_form.event = @event_form.create
-      redirect_to event_path(@event_form.event.url_path), notice: 'Event was successfully created.'
+      redirect_to event_path(@event_form.event.url_path), notice: 'イベントの作成に成功しました。'
     else
       @event_form.event = Event.new
       render :new

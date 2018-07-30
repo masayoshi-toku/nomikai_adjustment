@@ -71,4 +71,19 @@ RSpec.describe Event, type: :model do
       it { is_expected.to be false}
     end
   end
+
+  describe "scope" do
+    describe "latest" do
+      let(:user) { create(:user) }
+      let(:event) { create(:event, user: user) }
+      let(:second_event) { create(:event, user: user) }
+
+      before do
+        event
+        second_event
+      end
+
+      it { expect(user.events.latest).to eq [event, second_event] }
+    end
+  end
 end

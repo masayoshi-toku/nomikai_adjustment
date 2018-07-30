@@ -3,20 +3,20 @@ body {
   color: #333;
   margin: 33px;
   font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 17px;
+  line-height: 22px;
 }
 
 p, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 17px;
+  line-height: 22px;
 }
 
 pre {
   background-color: #eee;
   padding: 10px;
-  font-size: 11px;
+  font-size: 15px;
 }
 
 a {
@@ -81,4 +81,12 @@ div {
 
 label {
   display: block;
+}
+
+input {
+  font-size: 17px;
+}
+
+textarea {
+  font-size: 17px;
 }

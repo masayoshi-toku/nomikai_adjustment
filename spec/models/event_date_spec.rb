@@ -94,4 +94,19 @@ RSpec.describe EventDate, type: :model do
       it { is_expected.to eq [0, 0, 0]}
     end
   end
+
+  describe "scope" do
+    describe "latest" do
+      let(:event) { create(:event) }
+      let(:event_date) { create(:event_date, event: event) }
+      let(:second_event_date) { create(:event_date, event: event) }
+
+      before do
+        event_date
+        second_event_date
+      end
+
+      it { expect(event.event_dates.latest).to eq [event_date, second_event_date] }
+    end
+  end
 end
