@@ -4,11 +4,11 @@ class EventsController < ApplicationController
   before_action :event_owner?, only: [:edit, :update, :destroy]
 
   def index
-    @user_events = current_user.events.created_at_asc
+    @user_events = current_user.events.latest
   end
 
   def show
-    @event_dates = @event.event_dates.created_at_asc
+    @event_dates = @event.event_dates.latest
   end
 
   def new

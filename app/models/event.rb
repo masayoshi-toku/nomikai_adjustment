@@ -4,11 +4,11 @@ class Event < ApplicationRecord
   accepts_nested_attributes_for :event_dates
   validates :title, presence: true, length: { maximum: 100 }, uniqueness: { scope: :user_id }
   validates :url_path, presence: true, uniqueness: true
-  scope :created_at_asc, -> { order(:created_at) }
+  scope :latest, -> { order(:created_at) }
 
   def answerers
     if event_dates.present?
-      event_dates.inject(Array.new) { |answerers, event_date| answerers |= event_date.reactions.map { |reaction| reaction.user.name } }
+      event_dates.latest.inject(Array.new) { |answerers, event_date| answerers |= event_date.reactions.map { |reaction| reaction.user.name } }
     end
   end
 
