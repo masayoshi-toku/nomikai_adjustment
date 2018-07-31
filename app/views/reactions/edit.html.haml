@@ -1,6 +1,6 @@
 %h1 出席を修正する
 
-= render 'edit_form', reaction_form: @reaction_form, event_dates: @event.event_dates.latest, event_url_path: @event.url_path
-= link_to 'イベントを削除する', event_reactions_path(@event.url_path), method: :delete, data: { confirm: 'Are you sure?' }
+= render 'edit_form', reaction_form: @reaction_form, event_dates: @event.event_dates, event_url_path: @event.url_path
+= link_to '回答を削除する', event_reactions_path(@event.url_path), method: :delete, data: { confirm: 'Are you sure?' }
 |
 = link_to '戻る', event_path(@event.url_path)
