@@ -62,5 +62,20 @@ RSpec.describe Reaction, type: :model do
         end
       end
     end
+
+    describe "scope" do
+      describe "latest" do
+        let(:event_date) { create(:event_date) }
+        let(:reaction) { create(:reaction, event_date: event_date) }
+        let(:second_reaction) { create(:reaction, event_date: event_date) }
+
+        before do
+          reaction
+          second_reaction
+        end
+
+        it { expect(event_date.reactions.latest).to eq [reaction, second_reaction] }
+      end
+    end
   end
 end

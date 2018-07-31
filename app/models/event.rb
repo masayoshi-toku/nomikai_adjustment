@@ -8,7 +8,7 @@ class Event < ApplicationRecord
 
   def answerers
     if event_dates.present?
-      event_dates.latest.inject(Array.new) { |answerers, event_date| answerers |= event_date.reactions.map { |reaction| reaction.user.name } }
+      event_dates.latest.inject(Array.new) { |answerers, event_date| answerers | event_date.reactions.latest.map { |reaction| reaction.user.name } }
     end
   end
 

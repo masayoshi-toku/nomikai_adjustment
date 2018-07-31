@@ -5,7 +5,7 @@ module EventsHelper
 
   def convert_to_mark(event_date)
     @marks = []
-    event_date.reactions.order(:id).pluck(:status).each do |status|
+    event_date.reactions.latest.pluck(:status).each do |status|
       case status
       when 1
         mark = '◯'
