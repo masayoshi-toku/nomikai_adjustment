@@ -1,27 +1,28 @@
 %p
   %strong= @event.title
-%table{ border: 1 }
-  %thead
-    %tr
-      %th 日程
-      %th ◯
-      %th △
-      %th ×
-      - @event.answerers&.each do |name|
-        %th= name
-  %tbody
-    - @event_dates.each do |event_date|
+%div#table-wrap
+  %table{ border: 1 }
+    %thead
       %tr
-        %th= event_date.event_date
-        - if event_date.reactions.present?
-          - event_date.count_status.each do |total|
-            %td= total
-          - convert_to_mark(event_date).each do |mark|
-            %td= mark
-        - else
-          %td 0
-          %td 0
-          %td 0
+        %th 日程
+        %th ◯
+        %th △
+        %th ×
+        - @event.answerers&.each do |name|
+          %th= name
+    %tbody
+      - @event_dates.each do |event_date|
+        %tr
+          %th= event_date.event_date
+          - if event_date.reactions.present?
+            - event_date.count_status.each do |total|
+              %td= total
+            - convert_to_mark(event_date).each do |mark|
+              %td= mark
+          - else
+            %td 0
+            %td 0
+            %td 0
 %br
 - if @event.answerers&.include?(@current_user.name)
   = link_to '出席を修正する', edit_event_reactions_path(@event.url_path)
