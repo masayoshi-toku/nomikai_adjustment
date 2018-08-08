@@ -60,6 +60,8 @@ class EventForm
     end
 
     def event_dates
+      debugger
+      return
       event_dates_text.split(/[\r\n]+|\r+|\n+/).uniq.inject(Array.new) {|array, value| array.push({ event_date: value })}
     end
 end

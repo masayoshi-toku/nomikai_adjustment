@@ -10,8 +10,12 @@
   .field
     = form.label :title
     = form.text_field :title
-  .field
+  %span#add_event_date 追加する
+  .text_field#event_date_area
     = form.label :event_dates_text
-    = form.text_area :event_dates_text, size: '30x10', placeholder: '候補日程／日時を入力してください。候補の区切りは改行で判断されます。'
+    = form.datetime_field :event_dates_text
+  -# .field
+  -#   = form.label :event_dates_text
+  -#   = form.text_area :event_dates_text, size: '30x10', placeholder: '候補日程／日時を入力してください。候補の区切りは改行で判断されます。'
   .actions
     = form.submit 'イベントを作成する'
