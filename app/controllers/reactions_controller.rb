@@ -12,18 +12,18 @@ class ReactionsController < ApplicationController
   def create
     @reaction_form = ReactionForm.new(reaction_params.merge(user: current_user))
     if @reaction_form.create
-      redirect_to event_url(@event.url_path), notice: '出席の登録に成功しました。'
+      redirect_to event_url(@event.url_path), notice: '回答の登録に成功しました。'
     else
-      redirect_to new_event_reactions_url(@event.url_path), notice: '出席の登録に失敗しました。'
+      redirect_to new_event_reactions_url(@event.url_path), notice: '回答の登録に失敗しました。'
     end
   end
 
   def update
     @reaction_form = ReactionForm.new(reaction_params.merge(user: current_user))
     if @reaction_form.update_or_create
-      redirect_to event_url(@event.url_path), notice: '出席の更新に成功しました。'
+      redirect_to event_url(@event.url_path), notice: '回答の更新に成功しました。'
     else
-      redirect_to edit_event_reactions_path(@event.url_path), notice: '出席の更新に失敗しました。'
+      redirect_to edit_event_reactions_path(@event.url_path), notice: '回答の更新に失敗しました。'
     end
   end
 
@@ -31,9 +31,9 @@ class ReactionsController < ApplicationController
     if @event
       event_reactions = current_user.reactions.where(event_date_id: @event.event_dates.ids)
       if Reaction.destroy(event_reactions.ids)
-        redirect_to event_url(@event.url_path), notice: '出席の削除に成功しました。'
+        redirect_to event_url(@event.url_path), notice: '回答の削除に成功しました。'
       else
-        redirect_to event_url(@event.url_path), notice: '出席の削除に失敗しました。'
+        redirect_to event_url(@event.url_path), notice: '回答の削除に失敗しました。'
       end
     else
       redirect_to root_path, notice: 'イベントが存在しません。'
