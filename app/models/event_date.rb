@@ -3,6 +3,7 @@ class EventDate < ApplicationRecord
   has_many :reactions, dependent: :destroy
   validates :event_date, presence: true, uniqueness: { scope: :event_id }
   scope :latest, -> { order(:created_at) }
+  scope :date_latest, -> { order(:event_date) }
 
   def count_status
     all_status = reactions.pluck(:status)

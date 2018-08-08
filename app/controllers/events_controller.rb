@@ -8,7 +8,7 @@ class EventsController < ApplicationController
   end
 
   def show
-    @event_dates = @event.event_dates.latest
+    @event_dates = @event.event_dates.date_latest
   end
 
   def new
